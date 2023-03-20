@@ -1,0 +1,24 @@
+1 3 2
+2
+2 3
+3 4
+2
+2 3
+3 4
+
+
+Clases:                             Se debe hacer un archivo test para cada clase
+Juego con metodo resolver
+Estado: Los almacenados dentro de un nodo con "prev", podrian almacenarse en una cola para imprimirlos de forma lineal
+
+mismo tipo:
+Nodos abiertos: 
+Nodos cerrados (Ya visitados): Tabla hash
+
+
+
+
+
+
+
+

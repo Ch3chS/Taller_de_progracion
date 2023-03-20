@@ -1,15 +1,24 @@
-TARGET = main
-OBJS = main.o
-CFLAGS = -Wall
+TARGET = $(BINDIR)/main
+INCDIR = ./inc
+OBJDIR = ./obj
+BINDIR = ./bin
+SRCDIR = ./src
+CPPFLAGS = -Wall -I$(INCDIR)
+CC = g++
+OBJS   = $(OBJDIR)/main.o \
+		 $(OBJDIR)/Node.o \
+		 $(OBJDIR)/Restrictions.o
 
 $(TARGET): $(OBJS)
-	g++ $(CFLAGS) $(OBJS) -o $(TARGET)
+	mkdir -p $(BINDIR)
+	$(CC) $(CPPFLAGS) $(OBJS) -o $(TARGET)
 
-%.o : %.cpp
-	g++ -c $(CFLAGS) $< -o $@
+$(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	mkdir -p $(OBJDIR)
+	$(CC) -c -MD $(CPPFLAGS) $< -o $@
 
-
+-include $(OBJDIR)/*.d
 
 .PHONY: clean
 clean: 
-	rm *.o $(TARGET)
+	rm -r $(OBJDIR) $(BINDIR)
