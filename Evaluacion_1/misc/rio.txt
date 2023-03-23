@@ -16,6 +16,7 @@ Nodos abiertos:
 Nodos cerrados (Ya visitados): Tabla hash
 
 
+Quizas deba agregar una clase bote para la generalidad, ya que, pueden haber drivers de ambos lados.
 
 
 

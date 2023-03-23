@@ -6,7 +6,7 @@ SRCDIR = ./src
 CPPFLAGS = -Wall -I$(INCDIR)
 CC = g++
 OBJS   = $(OBJDIR)/main.o \
-		 $(OBJDIR)/Node.o \
+		 $(OBJDIR)/State.o \
 		 $(OBJDIR)/Restrictions.o
 
 $(TARGET): $(OBJS)
@@ -21,4 +21,4 @@ $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 
 .PHONY: clean
 clean: 
-	rm -r $(OBJDIR) $(BINDIR)
+	rm -f -r $(OBJDIR) $(BINDIR)

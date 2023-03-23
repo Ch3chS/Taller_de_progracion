@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "../inc/Node.h"
+#include "../inc/State.h"
 #include "../inc/Restrictions.h"
 
 using namespace std;
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[]){
 
     // --- Carga de restricciones ---
     int r1, r2;
-
+    r1 = boat;
     // Izquierda
     Restrictions *leftRestrictions;
     leftRestrictions = new Restrictions(items);
@@ -74,6 +74,7 @@ int main(int argc, char const *argv[]){
 
 
     // --------------------------------------- Procesamiento ----------------------------------------------------------
+    /*
 
     // Estado inicial
     int izq[drivers + items];
@@ -82,7 +83,6 @@ int main(int argc, char const *argv[]){
     Node *initial;
     initial = new Node(izq, der, NULL);
 
-    /*
 
 nodo con menor distancia al estado final o a la diagonal
 
