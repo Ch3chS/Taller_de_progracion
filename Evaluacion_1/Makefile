@@ -7,6 +7,8 @@ CPPFLAGS = -Wall -I$(INCDIR)
 CC = g++
 OBJS   = $(OBJDIR)/main.o \
 		 $(OBJDIR)/State.o \
+		 $(OBJDIR)/Stack.o \
+		 $(OBJDIR)/Game.o \
 		 $(OBJDIR)/Restrictions.o
 
 $(TARGET): $(OBJS)

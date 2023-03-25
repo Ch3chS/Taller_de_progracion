@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include "../inc/State.h"
+//#include "../inc/State.h"
 #include "../inc/Restrictions.h"
+#include "../inc/Game.h"
+
 
 using namespace std;
 
@@ -72,6 +74,9 @@ int main(int argc, char const *argv[]){
 
     archivo.close();
 
+    Game *j1 = new Game();
+
+    j1->solve();
 
     // --------------------------------------- Procesamiento ----------------------------------------------------------
     /*

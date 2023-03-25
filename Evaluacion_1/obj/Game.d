@@ -1,4 +1,4 @@
-obj/main.o: src/main.cpp /usr/include/stdc-predef.h \
+obj/Game.o: src/Game.cpp /usr/include/stdc-predef.h inc/Game.h \
  /usr/include/c++/12/iostream \
  /usr/include/c++/12/x86_64-redhat-linux/bits/c++config.h \
  /usr/include/bits/wordsize.h \
@@ -125,9 +125,4 @@ obj/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/12/bits/locale_facets.tcc \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
- /usr/include/c++/12/bits/istream.tcc /usr/include/c++/12/fstream \
- /usr/include/c++/12/bits/codecvt.h \
- /usr/include/c++/12/x86_64-redhat-linux/bits/basic_file.h \
- /usr/include/c++/12/x86_64-redhat-linux/bits/c++io.h \
- /usr/include/c++/12/bits/fstream.tcc src/../inc/Restrictions.h \
- src/../inc/Game.h src/../inc/Stack.h src/../inc/State.h
+ /usr/include/c++/12/bits/istream.tcc inc/Stack.h inc/State.h

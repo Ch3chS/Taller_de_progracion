@@ -1,4 +1,4 @@
-obj/Node.o: src/Node.cpp /usr/include/stdc-predef.h inc/Node.h \
+obj/Stack.o: src/Stack.cpp /usr/include/stdc-predef.h inc/Stack.h \
  /usr/include/c++/12/iostream \
  /usr/include/c++/12/x86_64-redhat-linux/bits/c++config.h \
  /usr/include/bits/wordsize.h \
@@ -125,4 +125,4 @@ obj/Node.o: src/Node.cpp /usr/include/stdc-predef.h inc/Node.h \
  /usr/include/c++/12/bits/locale_facets.tcc \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
- /usr/include/c++/12/bits/istream.tcc
+ /usr/include/c++/12/bits/istream.tcc inc/State.h
