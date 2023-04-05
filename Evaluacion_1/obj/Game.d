@@ -1,5 +1,6 @@
-obj/Game.o: src/Game.cpp /usr/include/stdc-predef.h inc/Game.h \
- /usr/include/c++/12/iostream \
+obj/Game.o: src/Game.cpp /usr/include/stdc-predef.h \
+ /usr/include/c++/12/fstream /usr/include/c++/12/istream \
+ /usr/include/c++/12/ios /usr/include/c++/12/iosfwd \
  /usr/include/c++/12/x86_64-redhat-linux/bits/c++config.h \
  /usr/include/bits/wordsize.h \
  /usr/include/c++/12/x86_64-redhat-linux/bits/os_defines.h \
@@ -8,8 +9,7 @@ obj/Game.o: src/Game.cpp /usr/include/stdc-predef.h inc/Game.h \
  /usr/include/bits/long-double.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h \
  /usr/include/c++/12/x86_64-redhat-linux/bits/cpu_defines.h \
- /usr/include/c++/12/pstl/pstl_config.h /usr/include/c++/12/ostream \
- /usr/include/c++/12/ios /usr/include/c++/12/iosfwd \
+ /usr/include/c++/12/pstl/pstl_config.h \
  /usr/include/c++/12/bits/stringfwd.h \
  /usr/include/c++/12/bits/memoryfwd.h /usr/include/c++/12/bits/postypes.h \
  /usr/include/c++/12/cwchar /usr/include/wchar.h \
@@ -123,6 +123,11 @@ obj/Game.o: src/Game.cpp /usr/include/stdc-predef.h inc/Game.h \
  /usr/include/c++/12/bits/streambuf_iterator.h \
  /usr/include/c++/12/x86_64-redhat-linux/bits/ctype_inline.h \
  /usr/include/c++/12/bits/locale_facets.tcc \
- /usr/include/c++/12/bits/basic_ios.tcc \
- /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
- /usr/include/c++/12/bits/istream.tcc inc/Stack.h inc/State.h
+ /usr/include/c++/12/bits/basic_ios.tcc /usr/include/c++/12/ostream \
+ /usr/include/c++/12/bits/ostream.tcc \
+ /usr/include/c++/12/bits/istream.tcc /usr/include/c++/12/bits/codecvt.h \
+ /usr/include/c++/12/x86_64-redhat-linux/bits/basic_file.h \
+ /usr/include/c++/12/x86_64-redhat-linux/bits/c++io.h \
+ /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/sstream \
+ /usr/include/c++/12/bits/sstream.tcc inc/Game.h \
+ /usr/include/c++/12/iostream inc/Stack.h inc/State.h inc/Restrictions.h

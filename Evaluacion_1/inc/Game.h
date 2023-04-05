@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Stack.h"
+#include "Restrictions.h"
 
 using namespace std;
 
@@ -10,13 +11,17 @@ class Game {
         Stack *closed;
         Game();
         ~Game();
+        int load(string fileName);
         void solve(); // resuelve el problema
-        State* moveL(State *s); // mueve el lobo
-        State* moveG(State *s); // mueve el granjero solo
-        State* moveC(State *s); // mueve la cabra
-        State* moveR(State *s); // mueve el repollo
-        bool canMoveL(State *s); // verifica si se puede mover el lobo
-        bool canMoveG(State *s); // verifica si se puede mover el granjero solo
-        bool canMoveC(State *s); // verifica si se puede mover la cabra
-        bool canMoveR(State *s); // verifica si se puede mover el repollo
+        State* move(State *s, int item);
+        bool canMoveL(State *s, int item);
+        bool canMoveR(State *s, int item);
+
+    private:
+        int items;
+        int drivers;
+        int boat;
+        int n;
+        Restrictions *rright;
+        Restrictions *rleft;
 };

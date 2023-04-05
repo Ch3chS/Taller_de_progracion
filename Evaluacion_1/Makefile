@@ -3,6 +3,7 @@ INCDIR = ./inc
 OBJDIR = ./obj
 BINDIR = ./bin
 SRCDIR = ./src
+TESTDIR = ./testing
 CPPFLAGS = -Wall -I$(INCDIR)
 CC = g++
 OBJS   = $(OBJDIR)/main.o \
@@ -10,6 +11,8 @@ OBJS   = $(OBJDIR)/main.o \
 		 $(OBJDIR)/Stack.o \
 		 $(OBJDIR)/Game.o \
 		 $(OBJDIR)/Restrictions.o
+
+TESTOBJS = $(OBJDIR)/Binary.o \
 
 $(TARGET): $(OBJS)
 	mkdir -p $(BINDIR)

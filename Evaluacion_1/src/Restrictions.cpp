@@ -1,24 +1,26 @@
 #include "Restrictions.h"
 using namespace std;
 
-Restrictions::Restrictions(int items){
-    this->items = items;
-    this->restrictions = new bool*[items];
-    for(int i=0; i<items; i++){
-        this->restrictions[i] = new bool[items];
+
+Restrictions::Restrictions(int n, int rnumber){
+    this->restrictionsNumber = rnumber;
+    this->n = n;
+    this->restrictions = new bool*[rnumber];
+    for(int i=0; i<rnumber; i++){
+        this->restrictions[i] = new bool[n];
     }
 }
 
-void Restrictions::addRestriction(int r1, int r2){
-    this->restrictions[r1][r2] = true;
-    this->restrictions[r2][r1] = true;
+void Restrictions::addRestriction(int rnumber, int item){
+    this->restrictions[rnumber][item] = true;
 }
 
 void Restrictions::print(){
-    for(int i = 0; i<items; i++){
-        for(int j = 0; j<items; j++){
+    for(int i = 0; i<this->restrictionsNumber; i++){
+        for(int j = 0; j<this->n; j++){
             printf("%d ", this->restrictions[i][j]);
         }
         printf("\n");
     }
 }
+

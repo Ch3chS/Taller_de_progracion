@@ -9,13 +9,13 @@ using namespace std;
 
 class State {
     public:
-        int left[4]; // 0: Lobo 1: Cabra 2: Repollo 3: Granjero
-        int right[4]; // 0: Lobo 1: Cabra 2: Repollo 3: Granjero
+        bool *left;      // Lista booleana
+        bool *right;     // Lista booleana
         State* previous;
-        State(); // constructor por fecto sin argumentos
-        State(int left[], int right[], State* previous); // constructores especificos
+        State(int n); // constructor por fecto sin argumentos
+        State(bool *left, bool *right, State* previous); // constructores especificos
         ~State(); // destructor
-        void print(); // imprime el estado
-        bool isFinal(); // verifica si es el estado final
-        void printPath(); // imprime el camino desde el estado inicial hasta el final
+        void print(int n); // imprime el estado
+        bool isFinal(int n); // verifica si es el estado final
+        void printPath(int n); // imprime el camino desde el estado inicial hasta el final
 };

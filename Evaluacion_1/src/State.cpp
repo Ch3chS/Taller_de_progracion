@@ -1,18 +1,17 @@
 #include "State.h"
 
-State::State() {
-    for (int i = 0; i < 4; i++) {
-        left[i] = 1; // todos a la izquierda
-        right[i] = 0; // nada a la derecha
+State::State(int n) {
+    for (int i = 0; i < n; i++) {
+        
+        this->left[i] = true;
+        this->right[i] = false;
     }
     previous = nullptr;
 }
 
-State::State(int left[], int right[], State* previous) {
-    for (int i = 0; i < 4; i++) {
-        this->left[i] = left[i];
-        this->right[i] = right[i];
-    }
+State::State(bool *left, bool *right, State* previous){
+    this->left = left;
+    this->right = right;
     this->previous = previous;
 }
 
@@ -20,34 +19,34 @@ State::~State() {
     // no se necesita
 }
 
-void State::print() {
+void State::print(int n) {
     cout << "Izquierda: ";
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < n; i++) {
         cout << left[i] << " ";
     }
     cout << endl;
     cout << "Derecha: ";
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < n; i++) {
         cout << right[i] << " ";
     }
     cout << endl;
 }
 
 // asumimos que no hay contradicciones 
-bool State::isFinal() {
-    for (int i = 0; i < 4; i++) {
-        if (right[i] == 0) {
+bool State::isFinal(int n) {
+    for (int i = 0; i < n; i++) {
+        if (right[i] == false) {
             return false;
         }
     }
     return true;
 }
 
-void State::printPath() {
+void State::printPath(int n) {
     State *actual = this; // this es puntero al objeto actual
-    actual->print();
+    actual->print(n);
     while (actual->previous != nullptr) {
         actual = actual->previous;
-        actual->print();
+        actual->print(n);
     }
 }

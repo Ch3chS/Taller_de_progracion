@@ -2,13 +2,14 @@
 
 class Restrictions{
     public:
-        int items;
+        int n, restrictionsNumber;
+        bool **restrictions;    // Matriz dinamica con las restricciones
         bool allowed(int item1, int item2);
         void addRestriction(int r1, int r2);
-        Restrictions(int items);
+        Restrictions(int n, int restrictions);
         void print();
+        int getn();
 
     private:
-        bool **restrictions;    // Matriz dinamica con las restricciones
         int order_of_evaluate[];   // orden en el que se evaluan los items
 };

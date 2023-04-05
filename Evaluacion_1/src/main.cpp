@@ -1,106 +1,33 @@
 #include <iostream>
 #include <fstream>
-//#include "../inc/State.h"
-#include "../inc/Restrictions.h"
 #include "../inc/Game.h"
-
 
 using namespace std;
 
-// Procesarmiento e impresion
+
 int main(int argc, char const *argv[]){
     
     if(argc < 2){
-        printf("\nDebe ingresar el nombre del archivo\n\n");
+        printf("\nDebe ingresar el nombre del archivo\n\n");   // Por si no se ingreso el nombre del archivo
         return 1;
     }
 
-    int drivers, items, boat;
+    Game *game = new Game();                             // Se crea un juego
 
-    // --------------------------------------- Carga de datos ----------------------------------------------------------
+    string name = "./misc/";
+    name.append(argv[1]);                              // Se completa el nombre del archivo con la ruta de archivos
 
-    // Abriendo archivo
-    string nombre = "./misc/";
-    nombre.append(argv[1]);
-    ifstream archivo(nombre.c_str());
-    string linea;
+    int failed = game->load(name);                     // Se cargan los datos del archivo
 
-    if(!archivo.is_open()){
-        printf("\nNo se pudo abrir el archivo.\n\n");
+    if(failed == 1 ){
+        delete game;
+        printf("\nNo se pudo abrir el archivo.\n\n");    // En caso de que no se haya podido leer el archivo se avisa por consola y termina el programa
         return 1;
     }
-    
-    // Datos principales
-    getline(archivo,linea,' ');
-    drivers = stoi(linea);
-    getline(archivo,linea,' ');
-    items = stoi(linea);
-    getline(archivo,linea);
-    boat = stoi(linea);
 
-
-    // --- Carga de restricciones ---
-    int r1, r2;
-    r1 = boat;
-    // Izquierda
-    Restrictions *leftRestrictions;
-    leftRestrictions = new Restrictions(items);
-
-    getline(archivo,linea);
-    int r = stoi(linea);
-
-    for(int i = 0; i<r; i++){
-        getline(archivo, linea, ' ');
-        r1 = stoi(linea) - 1 - drivers;
-        getline(archivo, linea);
-        r2 = stoi(linea) - 1 - drivers;
-        leftRestrictions->addRestriction(r1, r2);
-    }
-
-    // Derecha
-    Restrictions *rightRestrictions;
-    rightRestrictions = new Restrictions(items);
-
-    getline(archivo,linea);
-    r = stoi(linea);
-
-    for(int i = 0; i<r; i++){
-        getline(archivo, linea, ' ');
-        r1 = stoi(linea) - 1 - drivers;
-        getline(archivo, linea);
-        r2 = stoi(linea) - 1 - drivers;
-        rightRestrictions->addRestriction(r1, r2);
-    }
-
-    archivo.close();
-
-    Game *j1 = new Game();
-
-    j1->solve();
-
-    // --------------------------------------- Procesamiento ----------------------------------------------------------
-    /*
-
-    // Estado inicial
-    int izq[drivers + items];
-    int der[drivers + items];
-
-    Node *initial;
-    initial = new Node(izq, der, NULL);
-
-
-nodo con menor distancia al estado final o a la diagonal
-
-buscar en visitados, (busqueda binaria, se pueden ordenar)
-get, por visitar (heap o cola de prioridad)
-
-tabla de hash
-
-estado inicial = (GLCR,0000)
-estado final = (0000,GLCR)
-
-    */
-
+    game->solve();                                       // Se resuelve
+   
+    delete game;
     return 0;
 }
 

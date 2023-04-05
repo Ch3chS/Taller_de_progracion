@@ -129,5 +129,5 @@ obj/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/12/bits/codecvt.h \
  /usr/include/c++/12/x86_64-redhat-linux/bits/basic_file.h \
  /usr/include/c++/12/x86_64-redhat-linux/bits/c++io.h \
- /usr/include/c++/12/bits/fstream.tcc src/../inc/Restrictions.h \
- src/../inc/Game.h src/../inc/Stack.h src/../inc/State.h
+ /usr/include/c++/12/bits/fstream.tcc src/../inc/Game.h \
+ src/../inc/Stack.h src/../inc/State.h src/../inc/Restrictions.h
