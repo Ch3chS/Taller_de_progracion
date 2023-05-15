@@ -1,12 +1,17 @@
 #include <iostream>
+#include "State.h"
 
 using namespace std;
 
 class Boat{
     public:
-        bool left;  // true = izquierda, false = derecha
-        Boat();
+        int size;
+        int items;
+        int *boat;
+
+        Boat(int size);
         ~Boat();
-        void addItem();
-        void cross();
+        bool isFull();
+        void addItem(int item);
+        State *cross(State *prev, int n);
 };

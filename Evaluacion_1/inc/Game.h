@@ -1,6 +1,10 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include <iostream>
 #include "Stack.h"
 #include "Restrictions.h"
+#include "Boat.h"
 
 using namespace std;
 
@@ -25,3 +29,5 @@ class Game {
         Restrictions *rright;
         Restrictions *rleft;
 };
+
+#endif // GAME_H

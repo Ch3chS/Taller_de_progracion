@@ -1,0 +1,49 @@
+Modificar matriz: n items * n restricciones      (importante para la verificacion con el bote)
+Modificar entrada de texto con ss >>
+
+el algoritmo A no se modifica mucho
+
+los 4 if son los que se cambian para poder llevarlo al caso general, puede ser con un for (sugerencia)
+
+
+Opereciones:
+- boat[c+i] , si queda igual que el bote quizas se podria verificar las restricciones comparando el bote con la matriz de  (quizas doble for, trata de evitarlo si encuentras como)
+
+- canMove(State *s)
+- move(State *s)
+
+arreglo de operaciones:
+Operacion *op;
+op[op1, op2, ..., opn]
+
+
+
+arreglo gigante de estados para guardar los que no se han visitado (0) y los que ya se visitaron (1)
+
+revisa el heap (referencias)
+
+se pueden usar varias estructuras de dato para un mismo dato (por ejemplo sacar el mayor en un heap pero buscar en un arbol binario con los mismos datos)  (es un malgasto de memoria pero nos evaluaran tiempo, no memoria)
+
+Clases necesarias (todas con .h .cpp y testClase.cpp):
+State
+Game (Algoritmo A*)
+Operacion
+Cont1
+Cont2 (para optimizar)
+
+
+for(int h = 0; h < cantop; h++){
+    if(op[k].canMove(s)){
+        ....
+        ...
+        State *s1 = op[k].move(s);
+        ...
+    }
+    if(!closed.____)
+}
+
+for(k=0; k<max (number of combinations); k++){
+    if(isValid(k)){
+        push(h)
+    }
+}

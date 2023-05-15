@@ -14,29 +14,53 @@ Game::~Game() {
 }
 
 
-void Game::solve() {
+void Game::solve(){
     State *inicial = new State(this->n); // new llama al constructor y entrega un puntero
     open->push(inicial);
+    Boat *boat = new Boat(this->boat);
+
     while (!open->isEmpty()) {
+        // ---------------------------------------------- Cruce a la derecha ----------------------------------------------------------------------------
         State *s = open->pop();
-        if (s->isFinal(this->n)) {
+
+        int i = 1;                    //LLenado de bote (en izquierda)
+        boat->addItem(0);
+        while(!boat->isFull() && i < this->n){
+            if(canMoveL(s, i)){      // Se revisa si el item se puede mover
+                boat->addItem(i);    //se agrega el item al bote
+                i++;
+            }
+        }
+        
+        State *s1 = boat->cross(s, this->n);
+
+        if(!closed->search(s1) && !open->search(s1)) open->push(s1);   // Si el estado no ha sido visitado lo pusheamos por visitar
+            
+        closed->push(s);
+    
+        // ---------------------------------------------- Se verifica final -----------------------------------------------------------------------------
+        if (s1->isFinal(this->n)) {
             cout << "Solucion encontrada" << endl;
-            s->printPath(this->n);
+            s1->printPath(this->n);
             return;
         }
-        closed->push(s);
-        
-        /*
-        if(canMove){
-            move(){
+        open->push(s1);
 
-            }
-            Si el creado no esta cerrado ni abierto entonces se agrega al stack, caso contrario se borra
-        }
-        */
 
-    } // while
+        // -------------------------------------------- Cruce a la izquierda ----------------------------------------------------------------------------
+        State *s2 = open->pop();
+
+            // Se revisa si el item se puede mover
+
+            //se agrega el item el item boat()
+
+        // Despues de hacerlo con cada item recomendado (Con el bote a maxima capacidad de ser posible)
+
+        State *s3 = boat->cross(s2, this->n);
+        closed->push(s3);
+    }
     cout << "No hay solucion" << endl;
+    
 }
 
 State* Game::move(State *s, int item) {
@@ -45,10 +69,12 @@ State* Game::move(State *s, int item) {
 
 
 bool Game::canMoveL(State *s, int item) {
-    bool find = true;
-    for(int i = 0; this->rleft->restrictionsNumber; i++){
+    bool find = true;                           // Esto nos dirá si se encontro una restricción igual a la del estado con este item77'?????????????????????DSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST&/[ZiIi ]
+
+    for(int i = 0; i < this->rleft->restrictionsNumber; i++){
         if(!this->rleft->restrictions[i][item]){             // Si el item a mover no se encuentra en la restriccion entonces no es necesario revisarla
-            for(int j = 0; this->rleft->n; j++){
+        printf("\nCoord: (%d, %d)", i, item);
+            for(int j = 0; j < this->rleft->n; j++){
                 if(this->rleft->restrictions[i][j] != s->left[j]){
                     find = false;                            // Si la restriccion es 
                     break;
@@ -60,7 +86,7 @@ bool Game::canMoveL(State *s, int item) {
             find = true;
         }
     }
-    return false;        // Si se revisaron todas las restricciones y no son iguales al estado, entonces este es valido
+    return true;        // Si se revisaron todas las restricciones y no son iguales al estado, entonces este es valido
 }
 
 bool Game::canMoveR(State *s, int item) {

@@ -1,3 +1,6 @@
+#ifndef STACK_H
+#define STACK_H
+
 #include <iostream>
 #include "State.h"
 
@@ -16,3 +19,5 @@ class Stack {
         bool isEmpty();
         void print();
 };
+
+#endif // STACK_H

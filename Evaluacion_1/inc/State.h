@@ -1,3 +1,6 @@
+#ifndef STATE_H
+#define STATE_H
+
 #include <iostream>
 
 using namespace std;
@@ -9,13 +12,16 @@ using namespace std;
 
 class State {
     public:
+        int n;
         bool *left;      // Lista booleana
         bool *right;     // Lista booleana
         State* previous;
         State(int n); // constructor por fecto sin argumentos
-        State(bool *left, bool *right, State* previous); // constructores especificos
+        State(bool *left, bool *right, State* previous, int n); // constructores especificos
         ~State(); // destructor
         void print(int n); // imprime el estado
         bool isFinal(int n); // verifica si es el estado final
         void printPath(int n); // imprime el camino desde el estado inicial hasta el final
 };
+
+#endif // STATE_H

@@ -1,15 +1,18 @@
 #include "State.h"
 
 State::State(int n) {
+        this->n = n;
+        this->left = new bool[n];
+        this->right = new bool[n];
     for (int i = 0; i < n; i++) {
-        
         this->left[i] = true;
         this->right[i] = false;
     }
     previous = nullptr;
 }
 
-State::State(bool *left, bool *right, State* previous){
+State::State(bool *left, bool *right, State* previous, int n){
+    this->n = n;
     this->left = left;
     this->right = right;
     this->previous = previous;

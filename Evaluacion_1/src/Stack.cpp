@@ -64,6 +64,6 @@ bool Stack::isEmpty() {
 
 void Stack::print() {
     for (int i = 0; i <= top; i++) {
-        stack[i]->print();
+        stack[i]->print(stack[i]->n);
     }
 }

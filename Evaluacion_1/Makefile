@@ -10,7 +10,8 @@ OBJS   = $(OBJDIR)/main.o \
 		 $(OBJDIR)/State.o \
 		 $(OBJDIR)/Stack.o \
 		 $(OBJDIR)/Game.o \
-		 $(OBJDIR)/Restrictions.o
+		 $(OBJDIR)/Restrictions.o \
+		 $(OBJDIR)/Boat.o
 
 TESTOBJS = $(OBJDIR)/Binary.o \
 
