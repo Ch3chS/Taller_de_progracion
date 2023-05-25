@@ -1,0 +1,8 @@
+Este programa se hizo en el sistema Fedora Linux 38
+
+En Linux debería poder ejecutarse con los siguientes comandos en el directorio de este archivo README
+    Para compilar el archivo se debe ejecutar el comando: make all
+    Luego de compilarlo puede correrlo con el comando: ./bin/main
+
+al compilarlo también se compilan los archivos de testing que quedan en el directorio testbin
+    Para ejecutarlos use ./testbin/nombrearchivo.cpp
