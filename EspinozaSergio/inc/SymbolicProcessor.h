@@ -2,7 +2,7 @@
 #define SYMBOLICPROCESSOR_H
 
 #include <string>
-#include "Node.h"
+#include "Node.h" // Incluye el archivo que define la clase Node
 
 class SymbolicProcessor {
 public:
