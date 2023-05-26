@@ -1,38 +1,42 @@
 #include <iostream>
 #include <SymbolicProcessor.h>
+#include "NumberNode.h"
 #include <dirent.h>
 #include <vector>
 #include <cstring>
 using namespace std;
 
-int main(int argc, char const *argv[]){
-    
+int main(int argc, char const *argv[]) {
+
     // Crear una instancia de SymbolicProcessor
     SymbolicProcessor processor;
     char opcion;
-    bool salir = false;
+    bool exit = false;
+    bool loaded = false;
     vector<string> files; // Vector para almacenar los nombres de los archivos en la carpeta "misc"
     string fileName; // String para almacenar el nombre del archivo elegido por el usuario
 
-    while (!salir){
+    while (!exit) {
         cout << "\n\n---- Menú ----\n" << endl;
         cout << "1. Listar archivos" << endl;
         cout << "2. Evaluar expresión" << endl;
-        cout << "3. Salir\n" << endl;
+        cout << "3. Simplificar expresión" << endl;
+        cout << "4. Salir\n" << endl;
         cout << "Ingrese una opción: ";
         cin >> opcion;
         cout << endl;
 
-        switch (opcion){
+        switch (opcion) {
             case '1':
-                // En caso de que se seleccione esta opción se mostrarán los archivos en el directorio ./misc para que el usuario pueda elegir uno y este se cargue:
+                // En caso de que se seleccione esta opción se mostrarán los archivos en el directorio "./misc" para que el usuario pueda elegir uno y este se cargue:
 
                 DIR *dir; // Puntero a la estructura DIR para leer el contenido de un directorio
                 struct dirent *ent; // Puntero a la estructura dirent para almacenar información sobre un archivo en el directorio
                 if ((dir = opendir ("./misc")) != NULL) { // Abrir el directorio "misc"
                     int i = 1;
+                    cout << "\nArchivos en carpeta:\n" << endl;
                     while ((ent = readdir (dir)) != NULL) { // Leer cada archivo en el directorio
-                        if(strcmp(ent->d_name,".") != 0 && strcmp(ent->d_name,"..") != 0){ // Ignorar los archivos "." y ".."
+                        if(strcmp(ent->d_name,".") != 0 && strcmp(ent->d_name,"..") != 0) { // Ignorar los archivos "." y ".."
                             cout << i << ". " << ent->d_name << endl; // Mostrar el nombre del archivo
                             files.push_back(ent->d_name); // Agregar el nombre del archivo al vector de archivos
                             i++;
@@ -46,26 +50,44 @@ int main(int argc, char const *argv[]){
                 int fileIndex; // Variable para almacenar el índice del archivo elegido por el usuario
                 cout << "\nIngrese el número del archivo que desea cargar: ";
                 cin >> fileIndex; // Leer el índice del archivo elegido por el usuario
-                fileName = "./misc/" + files[fileIndex-1]; // Obtener el nombre del archivo elegido por el usuario
+                fileName = "./misc/" + files[fileIndex - 1]; // Obtener el nombre del archivo elegido por el usuario
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 if (processor.load(fileName)) { // Cargar el archivo elegido por el usuario
                     std::cout << "Cargado!\n\n";
-                    //Para acceder al arbol se usa processor.source()  (Es un recordatorio para mi XD por si vuelvo a trabajar en esto dias despues)
+                    // Para acceder al árbol se usa processor.source()  (Es un recordatorio para mí XD por si vuelvo a trabajar en esto días después)
+                    loaded = true;
                 }
                 break;
             case '2':
-                cout << "Evaluando...\n" << endl;
+                if (loaded && !processor.getVariables()) {
+                    cout << "Evaluando...\n" << endl;
+                    NumberNode *temp = processor.evaluateExpression(processor.getSource());
+                    cout << temp->getValue() << endl;
+                } else if (processor.getVariables()) {
+                    cout << "Este elemento tiene variables, no se puede evaluar.\n" << endl;
+                } else {
+                    cout << "Primero debe cargar un archivo (opción 1)\n" << endl;
+                }
                 break;
             case '3':
-                salir = true; // Salir del programa
+                if (loaded) {
+                    cout << "Simplificando...\n" << endl;
+                    processor.setSource(processor.simplifyExpression(processor.getSource()));
+                    processor.getSource()->printTree();                    
+                
+                } 
+                else {
+                    cout << "Primero debe cargar un archivo (opción 1)\n" << endl;
+                }
+                break;
+            case '4':
+                exit = true; // Salir del programa
                 break;
             default:
                 cout << "Opción inválida. Intente nuevamente.\n" << endl; // Mostrar un mensaje de error si la opción ingresada por el usuario no es válida
                 break;
         }
-
     }
-    
 
     return 0;
 }

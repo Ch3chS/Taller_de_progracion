@@ -2,6 +2,7 @@
 #include "OperationNode.h"
 #include "NumberNode.h"
 #include "VariableNode.h"
+#include "math.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -9,8 +10,24 @@
 
 using namespace std;
 
+std::map<char, std::function<int(int, int)>> SymbolicProcessor::operations = {
+    {'+', SymbolicProcessor::addition},
+    {'-', SymbolicProcessor::subtraction},
+    {'*', SymbolicProcessor::multiplication},
+    {'/', SymbolicProcessor::division},
+    {'^', [](int a, int b) { return std::pow(a, b); }} // Using a lambda function for pow
+};
+
 Node* SymbolicProcessor::getSource(){
     return this->source;
+}
+
+void SymbolicProcessor::setSource(Node* newSource){
+    this->source = newSource;
+}
+
+bool SymbolicProcessor::getVariables(){
+    return this->variables;
 }
 
 bool SymbolicProcessor::load(string filename) {
@@ -20,7 +37,7 @@ bool SymbolicProcessor::load(string filename) {
         cout << "No se pudo abrir el archivo" << endl;
         return false;
     }
-
+    this->variables = false;
     // Declaración de variables
     Node* node = nullptr;
     OperationNode* op = nullptr;
@@ -96,6 +113,7 @@ bool SymbolicProcessor::load(string filename) {
             else{
                 // Crea un nuevo nodo de variable y lo agrega como hijo del nodo de operación superior en la pila
                 variable = new VariableNode(token);
+                this->variables = true;   // Se avisa que hay variables en el arbol sintactico, para que las operaciones realizables sean Derivar y simplificar
                 if (!stack.empty()) {
                     op = static_cast<OperationNode*>(stack.top());
                     if (op->getLeft() == nullptr)
@@ -146,17 +164,105 @@ bool SymbolicProcessor::load(string filename) {
 }
 
 
+NumberNode* SymbolicProcessor::evaluateExpression(Node *expression){
+    if(expression->getType() == NUMBER){
+        return static_cast<NumberNode*>(expression);
+    }
+    int result;
+    OperationNode *temp = static_cast<OperationNode*>(expression);
+    int operand1 = evaluateExpression(temp->getLeft())->getValue();
+    int operand2 = evaluateExpression(temp->getRight())->getValue();
+    
+    result = operations[temp->getOperation()](operand1, operand2);
+    
+    return new NumberNode(result);
+}
+
+Node* SymbolicProcessor::simplifyExpression(Node* node) {
+    if (node == nullptr) {
+        return nullptr;
+    }
+
+    if (OperationNode* opNode = dynamic_cast<OperationNode*>(node)) {
+        opNode->setLeft(simplifyExpression(opNode->getLeft()));
+        opNode->setRight(simplifyExpression(opNode->getRight()));
+
+        // Simplificar expresiones de números
+        if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
+            if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
+                std::function<int(int, int)> operation = operations[opNode->getOperation()];
+                int result = operation(leftNumber->getValue(), rightNumber->getValue());
+                return new NumberNode(result);
+            }
+        }
+
+        // Simplificar multiplicación por 1
+        if (opNode->getOperation() == '*') {
+            if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
+                if (leftNumber->getValue() == 1) {
+                    return opNode->getRight();
+                }
+            }
+            if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
+                if (rightNumber->getValue() == 1) {
+                    return opNode->getLeft();
+                }
+            }
+        }
+
+        // Simplificar suma de un 0
+        if (opNode->getOperation() == '+') {
+            if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
+                if (leftNumber->getValue() == 0) {
+                    return opNode->getRight();
+                }
+            }
+            if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
+                if (rightNumber->getValue() == 0) {
+                    return opNode->getLeft();
+                }
+            }
+        }
+
+
+        // Simplificar resta de una variable consigo misma
+        if (opNode->getOperation() == '-' && opNode->getLeft()->getType() == VARIABLE && opNode->getRight()->getType() == VARIABLE) {
+            VariableNode* leftVarNode = dynamic_cast<VariableNode*>(opNode->getLeft());
+            VariableNode* rightVarNode = dynamic_cast<VariableNode*>(opNode->getRight());
+            if (leftVarNode->getVariable() == rightVarNode->getVariable()) {
+                return new NumberNode(0);
+            }
+        }
+    }
+
+    return node;
+}
+
+
+
+
+
+
+
+
 
 /*
-double SymbolicProcessor::evaluateExpression(Node* expression) {
-    
-}
 
-Node* SymbolicProcessor::simplifyExpression(Node* expression) {
-    
-}
-
-Node* SymbolicProcessor::differentiateExpression(Node* expression) {
+Node* SymbolicProcessor::differentiateExpression(){
     
 }
 */
+
+//Funciones propias para calculos
+    int SymbolicProcessor::addition(int operand1, int operand2){
+            return operand1 + operand2;
+    }
+    int SymbolicProcessor::subtraction(int operand1, int operand2){
+        return operand1 - operand2;
+    }
+    int SymbolicProcessor::multiplication(int operand1, int operand2){
+        return operand1 * operand2;
+    }
+    int SymbolicProcessor::division(int operand1, int operand2){
+        return operand1 / operand2;
+    }

@@ -12,6 +12,7 @@ std::string VariableNode::getVariable() const {
     return variable;
 }
 
+
 void VariableNode::setVariable(const std::string& variable) {
     this->variable = variable;
 }
