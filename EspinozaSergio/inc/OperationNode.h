@@ -1,7 +1,6 @@
 #ifndef OPERATION_NODE_H
 #define OPERATION_NODE_H
 
-#include <iostream>
 #include "Node.h"
 
 class OperationNode : public Node {

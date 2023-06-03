@@ -1,16 +1,16 @@
-#include <iostream>
-#include <SymbolicProcessor.h>
-#include "NumberNode.h"
 #include <dirent.h>
 #include <vector>
 #include <cstring>
-using namespace std;
+
+#include "SymbolicProcessor.h"
+
 
 int main(int argc, char const *argv[]) {
 
     // Crear una instancia de SymbolicProcessor
     SymbolicProcessor processor;
     char opcion;
+    string variable;
     bool exit = false;
     bool loaded = false;
     vector<string> files; // Vector para almacenar los nombres de los archivos en la carpeta "misc"
@@ -21,7 +21,8 @@ int main(int argc, char const *argv[]) {
         cout << "1. Listar archivos" << endl;
         cout << "2. Evaluar expresión" << endl;
         cout << "3. Simplificar expresión" << endl;
-        cout << "4. Salir\n" << endl;
+        cout << "4. Derivar expresión" << endl;
+        cout << "5. Salir\n" << endl;
         cout << "Ingrese una opción: ";
         cin >> opcion;
         cout << endl;
@@ -53,7 +54,8 @@ int main(int argc, char const *argv[]) {
                 fileName = "./misc/" + files[fileIndex - 1]; // Obtener el nombre del archivo elegido por el usuario
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 if (processor.load(fileName)) { // Cargar el archivo elegido por el usuario
-                    std::cout << "Cargado!\n\n";
+                    cout << "Cargado!\n\n";
+                    processor.getSource()->printTree();
                     // Para acceder al árbol se usa processor.source()  (Es un recordatorio para mí XD por si vuelvo a trabajar en esto días después)
                     loaded = true;
                 }
@@ -73,14 +75,20 @@ int main(int argc, char const *argv[]) {
                 if (loaded) {
                     cout << "Simplificando...\n" << endl;
                     processor.setSource(processor.simplifyExpression(processor.getSource()));
-                    processor.getSource()->printTree();                    
-                
+                    processor.getSource()->printTree();
                 } 
                 else {
                     cout << "Primero debe cargar un archivo (opción 1)\n" << endl;
                 }
                 break;
             case '4':
+                cout << "Ingrese la variable con respecto a la cual derivar: ";
+                cin >> variable;
+                cout << "\nDerivando...\n" << endl;
+                processor.setSource(processor.deriveExpression(processor.getSource(), variable));
+                processor.getSource()->printTree();  
+                break;
+            case '5':
                 exit = true; // Salir del programa
                 break;
             default:

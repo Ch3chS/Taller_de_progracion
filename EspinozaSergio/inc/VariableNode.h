@@ -2,7 +2,6 @@
 #define VARIABLE_NODE_H
 
 #include "Node.h"
-#include <string>
 
 class VariableNode : public Node {
 private:

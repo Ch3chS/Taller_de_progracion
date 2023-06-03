@@ -1,22 +1,13 @@
 #include "SymbolicProcessor.h"
-#include "OperationNode.h"
-#include "NumberNode.h"
-#include "VariableNode.h"
-#include "math.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <stack>
 
-using namespace std;
-
+// Mapeo de operación y función de calculo (para evitar usar if o switch en evaluateExpression)
 std::map<char, std::function<int(int, int)>> SymbolicProcessor::operations = {
     {'+', SymbolicProcessor::addition},
     {'-', SymbolicProcessor::subtraction},
     {'*', SymbolicProcessor::multiplication},
-    {'/', SymbolicProcessor::division},
     {'^', [](int a, int b) { return std::pow(a, b); }} // Using a lambda function for pow
 };
+
 
 Node* SymbolicProcessor::getSource(){
     return this->source;
@@ -59,7 +50,7 @@ bool SymbolicProcessor::load(string filename) {
         // Procesa cada token en la línea
         while (getline(ss, token, ' ')) {
             // Si el token es una operación
-            if (token == "+" || token == "*" || token == "-" || token == "^" || token == "/") {
+            if (token == "+" || token == "*" || token == "-" || token == "^") {
                 // Crea un nuevo nodo de operación y lo agrega a la pila
                 node = new OperationNode(token[0]);
                 if (!stack.empty()) {
@@ -164,20 +155,42 @@ bool SymbolicProcessor::load(string filename) {
 }
 
 
-NumberNode* SymbolicProcessor::evaluateExpression(Node *expression){
-    if(expression->getType() == NUMBER){
-        return static_cast<NumberNode*>(expression);
+Node* SymbolicProcessor::deriveExpression(Node* node, string variable){
+    if (node == nullptr) {
+        return nullptr;
     }
-    int result;
-    OperationNode *temp = static_cast<OperationNode*>(expression);
-    int operand1 = evaluateExpression(temp->getLeft())->getValue();
-    int operand2 = evaluateExpression(temp->getRight())->getValue();
+
+    // Si no es operador, ni tiene la variable en cuestion entonces se retorna la derivada de una constante (0)
+    if(node->getType() == NUMBER || (node->getType() == VARIABLE && dynamic_cast<VariableNode*>(node)->getVariable() != variable)){
+        return new NumberNode(0);
+    }
     
-    result = operations[temp->getOperation()](operand1, operand2);
-    
-    return new NumberNode(result);
+    // De ser una operación entonces se usa la función auxiliar correspondiente
+    if(OperationNode* opNode = dynamic_cast<OperationNode*>(node)){
+        switch (opNode->getOperation()){
+            case '+':
+                return deriveAddition(opNode, variable);
+                break;
+            case '-':
+                return deriveSubtraction(opNode, variable);
+                break;
+            case '*':
+                return deriveMultiplication(opNode, variable);
+                break;
+            case '^':
+                return derivePow(opNode, variable);
+                break;
+            default:
+                break;
+        }
+    }
+
+    //Si llegamos a este punto tenemos la variable en cuestion sola, por lo que se retorna la derivada de la variable sola (1)
+    return new NumberNode(1);
 }
 
+
+// Se debe llegar a la menor cantidad de nodos posibles
 Node* SymbolicProcessor::simplifyExpression(Node* node) {
     if (node == nullptr) {
         return nullptr;
@@ -210,6 +223,18 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
             }
         }
 
+        // SImplificar elevado a 1 y 0
+        if(opNode->getOperation() == '^'){
+            if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
+                if (rightNumber->getValue() == 1) {
+                    return opNode->getLeft();
+                }
+                if (rightNumber->getValue() == 0) {
+                    return new NumberNode(1);
+                }
+            }
+        }
+
         // Simplificar suma de un 0
         if (opNode->getOperation() == '+') {
             if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
@@ -233,36 +258,88 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
                 return new NumberNode(0);
             }
         }
+
+        // Conmutatividad
+
+        // Distrubición
+
+        // Factorizacióm
     }
+    
 
     return node;
 }
 
 
-
-
-
-
-
-
-
-/*
-
-Node* SymbolicProcessor::differentiateExpression(){
+// Toma un nodo cuyos hijos sean números y los opera recursivamente
+NumberNode* SymbolicProcessor::evaluateExpression(Node *expression){
+    if(expression->getType() == NUMBER){
+        return static_cast<NumberNode*>(expression);
+    }
+    int result;
+    OperationNode *temp = static_cast<OperationNode*>(expression);
+    int operand1 = evaluateExpression(temp->getLeft())->getValue();
+    int operand2 = evaluateExpression(temp->getRight())->getValue();
     
+    result = operations[temp->getOperation()](operand1, operand2);
+    
+    return new NumberNode(result);
 }
-*/
+
 
 //Funciones propias para calculos
-    int SymbolicProcessor::addition(int operand1, int operand2){
-            return operand1 + operand2;
+int SymbolicProcessor::addition(int operand1, int operand2){
+    return operand1 + operand2;
+}
+int SymbolicProcessor::subtraction(int operand1, int operand2){
+    return operand1 - operand2;
+}
+int SymbolicProcessor::multiplication(int operand1, int operand2){
+    return operand1 * operand2;
+}
+
+
+//Funciones auxiliares para derivar
+Node* SymbolicProcessor::deriveAddition(OperationNode *node, std::string variable){
+    node->setLeft(deriveExpression(node->getLeft(), variable));
+    node->setRight(deriveExpression(node->getRight(), variable));
+    return node;
+}
+
+Node* SymbolicProcessor::deriveSubtraction(OperationNode *node, std::string variable){
+    node->setLeft(deriveExpression(node->getLeft(), variable));
+    node->setRight(deriveExpression(node->getRight(), variable));
+    return node;
+}
+
+Node* SymbolicProcessor::deriveMultiplication(OperationNode *node, std::string variable){
+    if((node->getLeft()->getType() == NUMBER) && (node->getRight()->getType() == NUMBER)){
+        return new NumberNode(0);
     }
-    int SymbolicProcessor::subtraction(int operand1, int operand2){
-        return operand1 - operand2;
+    else if(node->getLeft()->getType() == NUMBER){
+        node->setRight(deriveExpression(node->getRight(), variable));
     }
-    int SymbolicProcessor::multiplication(int operand1, int operand2){
-        return operand1 * operand2;
+    else if(node->getRight()->getType() == NUMBER){
+        node->setLeft(deriveExpression(node->getLeft(), variable));
     }
-    int SymbolicProcessor::division(int operand1, int operand2){
-        return operand1 / operand2;
+    else{
+        OperationNode *left = new OperationNode('*', deriveExpression(node->getLeft(), variable), node->getRight());   // La derivada del primero por el segundo sin derivar
+        OperationNode *right = new OperationNode('*', deriveExpression(node->getLeft(), variable), node->getRight());  // La derivada del segundo por el primero sin derivar
+        node = new OperationNode('+', left, right);   // Suma de ambos
     }
+    return node;
+}
+
+
+Node* SymbolicProcessor::derivePow(OperationNode *node, std::string variable){
+    if((node->getLeft()->getType() == NUMBER) && (node->getRight()->getType() == NUMBER)){
+        return new NumberNode(0);
+    }
+    else{
+        OperationNode *left = new OperationNode('*', node->getRight(), node->getLeft());   // La derivada del primero por el segundo sin derivar
+        OperationNode *right = new OperationNode('-', node->getRight(), new NumberNode(1));  // La derivada del segundo por el primero sin derivar
+        node = new OperationNode('^', left, right);   // Suma de ambos
+    }
+    return node;
+    
+}

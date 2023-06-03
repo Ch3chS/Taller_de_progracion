@@ -1,5 +1,4 @@
 #include "NumberNode.h"
-#include <iostream>
 
 NumberNode::NumberNode(int value){
     this->value = value;

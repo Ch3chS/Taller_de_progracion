@@ -1,22 +1,20 @@
 #include "VariableNode.h"
-#include <iostream>
 
-VariableNode::VariableNode(const std::string& variable){
+VariableNode::VariableNode(const string& variable){
     this->variable = variable;
     this->setType(VARIABLE);
 }
 
 VariableNode::~VariableNode() {}
 
-std::string VariableNode::getVariable() const {
+    string VariableNode::getVariable() const {
     return variable;
 }
 
-
-void VariableNode::setVariable(const std::string& variable) {
+void VariableNode::setVariable(const string& variable) {
     this->variable = variable;
 }
 
 void VariableNode::printTree() {
-    std::cout << variable << " ";
+    cout << variable << " ";
 }

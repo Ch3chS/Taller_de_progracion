@@ -1,4 +1,3 @@
-#include <iostream>
 #include "OperationNode.h"
 
 OperationNode::OperationNode(char operation, Node* left, Node* right){
