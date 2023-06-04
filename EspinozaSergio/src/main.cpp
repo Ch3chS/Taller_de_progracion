@@ -1,9 +1,7 @@
 #include <dirent.h>
 #include <vector>
 #include <cstring>
-
 #include "SymbolicProcessor.h"
-
 
 int main(int argc, char const *argv[]) {
 
@@ -19,10 +17,9 @@ int main(int argc, char const *argv[]) {
     while (!exit) {
         cout << "\n\n---- Menú ----\n" << endl;
         cout << "1. Listar archivos" << endl;
-        cout << "2. Evaluar expresión" << endl;
+        cout << "2. Derivar expresión" << endl;
         cout << "3. Simplificar expresión" << endl;
-        cout << "4. Derivar expresión" << endl;
-        cout << "5. Salir\n" << endl;
+        cout << "4. Salir\n" << endl;
         cout << "Ingrese una opción: ";
         cin >> opcion;
         cout << endl;
@@ -61,15 +58,17 @@ int main(int argc, char const *argv[]) {
                 }
                 break;
             case '2':
-                if (loaded && !processor.getVariables()) {
-                    cout << "Evaluando...\n" << endl;
-                    NumberNode *temp = processor.evaluateExpression(processor.getSource());
-                    cout << temp->getValue() << endl;
-                } else if (processor.getVariables()) {
-                    cout << "Este elemento tiene variables, no se puede evaluar.\n" << endl;
-                } else {
+                if (loaded) {
+                    cout << "Ingrese la variable con respecto a la cual derivar: ";
+                    cin >> variable;
+                    cout << "\nDerivando...\n" << endl;
+                    processor.setSource(processor.deriveExpression(processor.getSource(), variable));
+                    processor.getSource()->printTree();  
+                } 
+                else {
                     cout << "Primero debe cargar un archivo (opción 1)\n" << endl;
                 }
+                
                 break;
             case '3':
                 if (loaded) {
@@ -80,15 +79,8 @@ int main(int argc, char const *argv[]) {
                 else {
                     cout << "Primero debe cargar un archivo (opción 1)\n" << endl;
                 }
-                break;
+                break;     
             case '4':
-                cout << "Ingrese la variable con respecto a la cual derivar: ";
-                cin >> variable;
-                cout << "\nDerivando...\n" << endl;
-                processor.setSource(processor.deriveExpression(processor.getSource(), variable));
-                processor.getSource()->printTree();  
-                break;
-            case '5':
                 exit = true; // Salir del programa
                 break;
             default:

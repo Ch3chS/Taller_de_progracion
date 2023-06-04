@@ -3,16 +3,29 @@
 
 #include "Node.h"
 
+/*
+    * Clase VariableNode:
+    * Esta clase representa una hoja del árbol sintáctico, específicamente del tipo variable,
+    * es decir, dentro de la notación polaca este sería una variable cualquiera.  
+*/
 class VariableNode : public Node {
 private:
-    std::string variable;
+    string variable;
 
 public:
-    VariableNode(const std::string& variable);
+    // Constructor
+    VariableNode(const string& variable);
+
+    // Destructor
     ~VariableNode();
 
-    std::string getVariable() const;
-    void setVariable(const std::string& variable);
+    // Getters
+    string getVariable() const;
+
+    // Setters
+    void setVariable(const string& variable);
+
+    // Otros
     void printTree() override;
 };
 

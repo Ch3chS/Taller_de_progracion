@@ -12,31 +12,41 @@
 #include "math.h"
 
 
+/*
+    * Clase SymbolicProcessor:
+    * Clase que representa el procesador simbólico como tal, cuenta con un puntero a la raiz de un arbol sintáctico
+    * para un fácil acceso al mismo y con funciones que permiten cargarlo y procesarlo.
+*/
 class SymbolicProcessor {
-public:
-    Node* getSource();
-    void setSource(Node* newSource);
-    bool getVariables();
-    bool load(std::string filename);
-    NumberNode* evaluateExpression(Node* expression);
-    Node* simplifyExpression(Node* expression);
-    Node* deriveExpression(Node* node, std::string variable);
-
-private:
+    private:
     Node* source;
-    bool variables = false;
     static std::map<char, std::function<int(int, int)>> operations;
 
-    //Funciones propias para calculos internos
+    //Funciones auxiliares propias para calculos internos
     static int addition(int operand1, int operand2);
     static int subtraction(int operand1, int operand2);
     static int multiplication(int operand1, int operand2);
 
-    //Funciones para derivar
+    //Funciones auxiliares para derivar
     Node* deriveAddition(OperationNode* node, std::string variable);
     Node* deriveSubtraction(OperationNode* node, std::string variable);
     Node* deriveMultiplication(OperationNode* node, std::string variable);
     Node* derivePow(OperationNode* node, std::string variable);
+
+    // Funciones auxiliares para simplificar
+    NumberNode* evaluateExpression(Node* expression);
+
+public:
+    // Getters
+    Node* getSource();
+
+    // Setters
+    void setSource(Node* newSource);
+
+    // Otros
+    bool load(std::string filename);
+    Node* deriveExpression(Node* node, std::string variable);
+    Node* simplifyExpression(Node* expression);
 };
 
 #endif
