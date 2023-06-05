@@ -20,7 +20,7 @@
 class SymbolicProcessor {
     private:
     Node* source;
-    static std::map<char, std::function<int(int, int)>> operations;
+    static map<char, function<int(int, int)>> operations;
 
     //Funciones auxiliares propias para calculos internos
     static int addition(int operand1, int operand2);
@@ -28,10 +28,10 @@ class SymbolicProcessor {
     static int multiplication(int operand1, int operand2);
 
     //Funciones auxiliares para derivar
-    Node* deriveAddition(OperationNode* node, std::string variable);
-    Node* deriveSubtraction(OperationNode* node, std::string variable);
-    Node* deriveMultiplication(OperationNode* node, std::string variable);
-    Node* derivePow(OperationNode* node, std::string variable);
+    Node* deriveAddition(OperationNode* node, string variable);
+    Node* deriveSubtraction(OperationNode* node, string variable);
+    Node* deriveMultiplication(OperationNode* node, string variable);
+    Node* derivePow(OperationNode* node, string variable);
 
     // Funciones auxiliares para simplificar
     NumberNode* evaluateExpression(Node* expression);
@@ -44,8 +44,8 @@ public:
     void setSource(Node* newSource);
 
     // Otros
-    bool load(std::string filename);
-    Node* deriveExpression(Node* node, std::string variable);
+    bool load(string filename);
+    Node* deriveExpression(Node* node, string variable);
     Node* simplifyExpression(Node* expression);
 };
 

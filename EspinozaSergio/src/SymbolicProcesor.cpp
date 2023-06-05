@@ -125,22 +125,37 @@ Node* SymbolicProcessor::deriveMultiplication(OperationNode *node, std::string v
     * Retorno:
     * - node: nodo con la expresión ya derivada
 */
-Node* SymbolicProcessor::derivePow(OperationNode *node, std::string variable){
-    if((node->getLeft()->getType() == NUMBER) && (node->getRight()->getType() == NUMBER)){
+Node* SymbolicProcessor::derivePow(OperationNode* node, string variable) {
+    if(node->getLeft()->getType() == NUMBER && node->getRight()->getType() == NUMBER){
         return new NumberNode(0);
-    }
+    } 
     else{
-        OperationNode *left = new OperationNode('*', node->getRight(), node->getLeft());   // La derivada del primero por el segundo sin derivar
-        OperationNode *right = new OperationNode('-', node->getRight(), new NumberNode(1));  // La derivada del segundo por el primero sin derivar
-        node = new OperationNode('^', left, right);   // Suma de ambos
+        if (node->getLeft()->getType() == VARIABLE) {
+            if (static_cast<VariableNode*>(node->getLeft())->getVariable() == variable) {
+                OperationNode* left = new OperationNode('*', node->getRight(), node->getLeft());
+                OperationNode* right = new OperationNode('-', node->getRight(), new NumberNode(1));
+                node = new OperationNode('^', left, right); // Suma de ambos
+                return node;
+            } 
+            else{
+                return new NumberNode(0);
+            }
+        }
+        else if(node->getRight()->getType() == VARIABLE){
+            if (static_cast<VariableNode*>(node->getRight())->getVariable() == variable) {
+                return node; // Derivada de un número elevado a x
+            } 
+            else {
+                return new NumberNode(0);
+            }
+        }
     }
-    return node;   
+    return node;
 }
 
 
-// -------------------------------------------------- Método auxiliar para simplificar -------------------------------------------------
 
-// 
+// -------------------------------------------------- Método auxiliar para simplificar ------------------------------------------------- 
 
 /*
     * Método:

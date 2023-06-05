@@ -1,6 +1,6 @@
-#include <dirent.h>
 #include <vector>
 #include <cstring>
+#include "dirent.h"
 #include "SymbolicProcessor.h"
 
 int main(int argc, char const *argv[]) {
@@ -47,7 +47,7 @@ int main(int argc, char const *argv[]) {
                 }
                 int fileIndex; // Variable para almacenar el índice del archivo elegido por el usuario
                 cout << "\nIngrese el número del archivo que desea cargar: ";
-                cin >> fileIndex; // Leer el índice del archivo elegido por el usuario
+                cin >> fileIndex; // Leer el índice del archivo elegido por el usuario4
                 fileName = "./misc/" + files[fileIndex - 1]; // Obtener el nombre del archivo elegido por el usuario
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 if (processor.load(fileName)) { // Cargar el archivo elegido por el usuario
