@@ -1,6 +1,4 @@
-#include <iostream>
 #include "SymbolicProcessor.h"
-#include "OperationNode.h"
 
 using namespace std;
 
@@ -16,6 +14,16 @@ int main() {
 
         cout << "\n\n";
 
+        //Derivar arbol
+        processor.deriveExpression(processor.getSource(), "x")->printTree();
+
+        cout << "\n\n";
+
+        //Simplificar arbol
+        processor.simplifyExpression(processor.getSource())->printTree();
+
+        cout << "\n\n";
+        
         return 0;
     }
     cout << "No se pudo cargar el archivo";

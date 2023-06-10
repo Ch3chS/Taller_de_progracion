@@ -1,5 +1,4 @@
 #include "Node.h"
-#include <iostream>
 
 int main() {
     Node *node = new Node();
