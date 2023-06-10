@@ -130,20 +130,19 @@ Node* SymbolicProcessor::derivePow(OperationNode* node, string variable) {
         return new NumberNode(0);
     } 
     else{
-        if (node->getLeft()->getType() == VARIABLE) {
+        if (node->getLeft()->getType() == VARIABLE) {   // Derivada de una variable elevada a un número
             if (static_cast<VariableNode*>(node->getLeft())->getVariable() == variable) {
                 OperationNode* left = new OperationNode('*', node->getRight(), node->getLeft());
                 OperationNode* right = new OperationNode('-', node->getRight(), new NumberNode(1));
                 node = new OperationNode('^', left, right); // Suma de ambos
                 return node;
-            } 
-            else{
+            } else{
                 return new NumberNode(0);
             }
         }
         else if(node->getRight()->getType() == VARIABLE){
             if (static_cast<VariableNode*>(node->getRight())->getVariable() == variable) {
-                return node; // Derivada de un número elevado a x
+                return node; // Derivada de un número elevado a x..
             } 
             else {
                 return new NumberNode(0);
@@ -178,6 +177,8 @@ NumberNode* SymbolicProcessor::evaluateExpression(Node *expression){
     
     return new NumberNode(result);
 }
+
+
 
 
 
@@ -224,15 +225,12 @@ bool SymbolicProcessor::load(string filename) {
         cout << "No se pudo abrir el archivo" << endl;
         return false;
     }
+
     // Declaración de variables
-    Node* node = nullptr;
-    OperationNode* op = nullptr;
-    NumberNode* number = nullptr;
-    VariableNode* variable = nullptr;
-    string line, token;
+    string line;
     stringstream ss;
 
-    // Crea una pila para almacenar los nodos de operación
+    // Crea una pila para almacenar los nodos
     stack<Node*> stack;
 
     // Asigna nullptr como valor inicial al puntero source
@@ -242,102 +240,39 @@ bool SymbolicProcessor::load(string filename) {
     if (getline(file, line, '\n')) {
         ss.str(line);
 
-        // Procesa cada token en la línea
-        while (getline(ss, token, ' ')) {
+        // Procesa cada token en la línea en orden inverso
+        vector<string> tokens{ istream_iterator<string>{ss}, istream_iterator<string>{} };
+        for (auto it = tokens.rbegin(); it != tokens.rend(); ++it) {
+            string token = *it;
+
             // Si el token es una operación
             if (token == "+" || token == "*" || token == "-" || token == "^") {
                 // Crea un nuevo nodo de operación y lo agrega a la pila
-                node = new OperationNode(token[0]);
-                if (!stack.empty()) {
-                    op = static_cast<OperationNode*>(stack.top());
-                    // Si hay más de dos operaciones consecutivas, agrega las operaciones anteriores al árbol
-                    while (op->getLeft() != nullptr && op->getRight() != nullptr) {
-                        stack.pop();
-                        if (!stack.empty()) {
-                            OperationNode* parentOp = static_cast<OperationNode*>(stack.top());
-                            if (parentOp->getLeft() == nullptr) {
-                                parentOp->setLeft(op);
-                            } else {
-                                parentOp->setRight(op);
-                            }
-                            op = parentOp;
-                        } else {
-                            this->source = op;
-                            break;
-                        }
-                    }
-                }
+                Node* left = stack.top();
+                stack.pop();
+                Node* right = stack.top();
+                stack.pop();
+                Node* node = new OperationNode(token[0], left, right);
                 stack.push(node);
             }
             // Si el token es un número
             else if (token[0] >= '0' && token[0] <= '9') {
-                // Crea un nuevo nodo de número y lo agrega como hijo del nodo de operación superior en la pila
-                number = new NumberNode(stoi(token));
-                if (!stack.empty()) {
-                    op = static_cast<OperationNode*>(stack.top());
-                    if (op->getLeft() == nullptr){
-                        op->setLeft(number);
-                    }
-                    else {
-                        op->setRight(number);
-                        stack.pop();
-                        // Si hay un nodo de operación padre en la pila, agrega el nodo de operación como hijo del nodo de operación padre
-                        if (!stack.empty()) {
-                            OperationNode* parentOp = static_cast<OperationNode*>(stack.top());
-                            if (parentOp->getLeft() == nullptr) {
-                                parentOp->setLeft(op);
-                            } else {
-                                parentOp->setRight(op);
-                            }
-                        } else {
-                            this->source = op;
-                        }
-                    }
-                }
-            } 
+                // Crea un nuevo nodo de número y lo agrega a la pila
+                Node* node = new NumberNode(stoi(token));
+                stack.push(node);
+            }
             // Si el token es una variable
-            else{
-                // Crea un nuevo nodo de variable y lo agrega como hijo del nodo de operación superior en la pila
-                variable = new VariableNode(token);
-                if (!stack.empty()) {
-                    op = static_cast<OperationNode*>(stack.top());
-                    if (op->getLeft() == nullptr)
-                        op->setLeft(variable);
-                    else {
-                        op->setRight(variable);
-                        stack.pop();
-                        // Si hay un nodo de operación padre en la pila, agrega el nodo de operación como hijo del nodo de operación padre
-                        if (!stack.empty()) {
-                            OperationNode* parentOp = static_cast<OperationNode*>(stack.top());
-                            if (parentOp->getLeft() == nullptr) {
-                                parentOp->setLeft(op);
-                            } else {
-                                parentOp->setRight(op);
-                            }
-                        } else {
-                            this->source = op;
-                        }
-                    }
-                }
+            else {
+                // Crea un nuevo nodo de variable y lo agrega a la pila
+                Node* node = new VariableNode(token);
+                stack.push(node);
             }
         }
 
-        // Después de procesar la línea de entrada, maneja los nodos restantes en la pila
-        while (!stack.empty()) {
-            op = static_cast<OperationNode*>(stack.top());
-            stack.pop();
-            if (!stack.empty()) {
-                OperationNode* parentOp = static_cast<OperationNode*>(stack.top());
-                if (parentOp->getLeft() == nullptr) {
-                    parentOp->setLeft(op);
-                } else {
-                    parentOp->setRight(op);
-                }
-            } else {
-                this->source = op;
-            }
-        }
-    } 
+        // Después de procesar la línea de entrada, el último nodo en la pila es la raíz del árbol sintáctico
+        this->source = stack.top();
+        stack.pop();
+    }
     else {
         cout << "No se pudo leer la linea" << endl;
         return false;
@@ -418,6 +353,126 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
             }
         }
 
+        // Simplificar expresiones del tipo "+ + + 1 x + 1 x + x 1" 
+        if (opNode->getOperation() == '+') {
+            std::vector<std::pair<Node*, int>> operandCounts;
+
+            // Recolectar operandos en la expresión de suma
+            std::stack<Node*> stack;
+            stack.push(opNode);
+
+            while (!stack.empty()) {
+                Node* node = stack.top();
+                stack.pop();
+
+                if (node->getType() == NUMBER || node->getType() == VARIABLE) {
+                    // Buscar el operando en el vector de operandos
+                    int index = -1;
+                    for (std::vector<std::pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
+                        if (operandCounts[i].first->getType() == node->getType()) {
+                            if (NumberNode* numberNode1 = dynamic_cast<NumberNode*>(operandCounts[i].first)) {
+                                if (NumberNode* numberNode2 = dynamic_cast<NumberNode*>(node)) {
+                                    if (numberNode1->getValue() == numberNode2->getValue()) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                            } else if (VariableNode* variableNode1 = dynamic_cast<VariableNode*>(operandCounts[i].first)) {
+                                if (VariableNode* variableNode2 = dynamic_cast<VariableNode*>(node)) {
+                                    if (variableNode1->getVariable() == variableNode2->getVariable()) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (index == -1) {
+                        operandCounts.push_back(std::make_pair(node, 1));
+                    } else {
+                        operandCounts[index].second++;
+                    }
+                } else if (OperationNode* opNode = dynamic_cast<OperationNode*>(node)) {
+                    if (opNode->getOperation() == '+') {
+                        stack.push(opNode->getLeft());
+                        stack.push(opNode->getRight());
+                    } else {
+                        // Buscar el operando en el vector de operandos
+                        int index = -1;
+                        for (std::vector<std::pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
+                            if (operandCounts[i].first->getType() == node->getType()) {
+                                if (NumberNode* numberNode1 = dynamic_cast<NumberNode*>(operandCounts[i].first)) {
+                                    if (NumberNode* numberNode2 = dynamic_cast<NumberNode*>(node)) {
+                                        if (numberNode1->getValue() == numberNode2->getValue()) {
+                                            index = i;
+                                            break;
+                                        }
+                                    }
+                                } else if (VariableNode* variableNode1 = dynamic_cast<VariableNode*>(operandCounts[i].first)) {
+                                    if (VariableNode* variableNode2 = dynamic_cast<VariableNode*>(node)) {
+                                        if (variableNode1->getVariable() == variableNode2->getVariable()) {
+                                            index = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (index == -1) {
+                            operandCounts.push_back(std::make_pair(node, 1));
+                        } else {
+                            operandCounts[index].second++;
+                        }
+                    }
+                }
+            }
+
+            if (operandCounts.empty()) {
+                return new NumberNode(0);
+            } else if (operandCounts.size() == 1) {
+                auto& pair = operandCounts[0];
+                if (pair.second == 1) {
+                    return pair.first;
+                } else {
+                    Node* count = new NumberNode(pair.second);
+                    Node* operand = pair.first;
+                    return new OperationNode('*', count, operand);
+                }
+            } else {
+                // Crear una nueva expresión de multiplicación
+                Node* result = nullptr;
+                for (auto& pair : operandCounts) {
+                    if (pair.second == 1) {
+                        result = result == nullptr ? pair.first : new OperationNode('+', result, pair.first);
+                    } else {
+                        Node* count = new NumberNode(pair.second);
+                        Node* product = new OperationNode('*', count, pair.first);
+                        result = result == nullptr ? product : new OperationNode('+', result, product);
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        
+
+        // Simplificar multiplicación por 0
+        if (opNode->getOperation() == '*') {
+            if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
+                if (leftNumber->getValue() == 0) {
+                    return leftNumber;
+                }
+            }
+            if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
+                if (rightNumber->getValue() == 0) {
+                    return rightNumber;
+                }
+            }
+        }
+
         // Simplificar multiplicación por 1
         if (opNode->getOperation() == '*') {
             if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
@@ -433,7 +488,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
         }
 
         // SImplificar elevado a 1 y 0
-        if(opNode->getOperation() == '^'){
+        if (opNode->getOperation() == '^') {
             if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
                 if (rightNumber->getValue() == 1) {
                     return opNode->getLeft();
@@ -458,7 +513,6 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
             }
         }
 
-
         // Simplificar resta de una variable consigo misma
         if (opNode->getOperation() == '-' && opNode->getLeft()->getType() == VARIABLE && opNode->getRight()->getType() == VARIABLE) {
             VariableNode* leftVarNode = dynamic_cast<VariableNode*>(opNode->getLeft());
@@ -468,11 +522,10 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
             }
         }
 
-        // Conmutatividad
-
-        // Distrubición
-
-        // Factorizacióm
+        // Agrupar términos semejantes en una expresión
+        
     }
+
     return node;
 }
+

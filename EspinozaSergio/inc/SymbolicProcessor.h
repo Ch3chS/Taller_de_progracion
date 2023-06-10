@@ -4,6 +4,7 @@
 #include <functional>
 #include <sstream>
 #include <fstream>
+#include <vector>
 #include <stack>
 #include <map>
 #include "OperationNode.h"
