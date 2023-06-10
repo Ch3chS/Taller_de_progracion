@@ -46,5 +46,5 @@ int NumberNode::getValue() const {
     * - void
 */
 void NumberNode::printTree() {
-    std::cout << value << " ";
+    cout << value << " ";
 }

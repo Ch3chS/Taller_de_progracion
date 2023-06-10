@@ -1,7 +1,7 @@
 #include "SymbolicProcessor.h"
 
 // Mapeo de operación y método de cálculo (para evitar usar if o switch en evaluateExpression)
-std::map<char, std::function<int(int, int)>> SymbolicProcessor::operations = {
+map<char, function<int(int, int)>> SymbolicProcessor::operations = {
     {'+', SymbolicProcessor::addition},
     {'-', SymbolicProcessor::subtraction},
     {'*', SymbolicProcessor::multiplication},
@@ -83,7 +83,7 @@ Node* SymbolicProcessor::deriveAddition(OperationNode *node, string variable){
     * Retorno:
     * - node: nodo con la expresión ya derivada
 */
-Node* SymbolicProcessor::deriveSubtraction(OperationNode *node, std::string variable){
+Node* SymbolicProcessor::deriveSubtraction(OperationNode *node, string variable){
     node->setLeft(deriveExpression(node->getLeft(), variable));
     node->setRight(deriveExpression(node->getRight(), variable));
     return node;
@@ -98,7 +98,7 @@ Node* SymbolicProcessor::deriveSubtraction(OperationNode *node, std::string vari
     * Retorno:
     * - node: nodo con la expresión ya derivada
 */
-Node* SymbolicProcessor::deriveMultiplication(OperationNode *node, std::string variable){
+Node* SymbolicProcessor::deriveMultiplication(OperationNode *node, string variable){
     if((node->getLeft()->getType() == NUMBER) && (node->getRight()->getType() == NUMBER)){
         return new NumberNode(0);
     }
@@ -347,7 +347,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
         // Simplificar expresiones de números
         if (NumberNode* leftNumber = dynamic_cast<NumberNode*>(opNode->getLeft())) {
             if (NumberNode* rightNumber = dynamic_cast<NumberNode*>(opNode->getRight())) {
-                std::function<int(int, int)> operation = operations[opNode->getOperation()];
+                function<int(int, int)> operation = operations[opNode->getOperation()];
                 int result = operation(leftNumber->getValue(), rightNumber->getValue());
                 return new NumberNode(result);
             }
@@ -355,10 +355,10 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
 
         // Simplificar expresiones del tipo "+ + + 1 x + 1 x + x 1" 
         if (opNode->getOperation() == '+') {
-            std::vector<std::pair<Node*, int>> operandCounts;
+            vector<pair<Node*, int>> operandCounts;
 
             // Recolectar operandos en la expresión de suma
-            std::stack<Node*> stack;
+            stack<Node*> stack;
             stack.push(opNode);
 
             while (!stack.empty()) {
@@ -368,7 +368,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
                 if (node->getType() == NUMBER || node->getType() == VARIABLE) {
                     // Buscar el operando en el vector de operandos
                     int index = -1;
-                    for (std::vector<std::pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
+                    for (vector<pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
                         if (operandCounts[i].first->getType() == node->getType()) {
                             if (NumberNode* numberNode1 = dynamic_cast<NumberNode*>(operandCounts[i].first)) {
                                 if (NumberNode* numberNode2 = dynamic_cast<NumberNode*>(node)) {
@@ -389,7 +389,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
                     }
 
                     if (index == -1) {
-                        operandCounts.push_back(std::make_pair(node, 1));
+                        operandCounts.push_back(make_pair(node, 1));
                     } else {
                         operandCounts[index].second++;
                     }
@@ -400,7 +400,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
                     } else {
                         // Buscar el operando en el vector de operandos
                         int index = -1;
-                        for (std::vector<std::pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
+                        for (vector<pair<Node*, int>>::size_type i = 0; i < operandCounts.size(); i++) {
                             if (operandCounts[i].first->getType() == node->getType()) {
                                 if (NumberNode* numberNode1 = dynamic_cast<NumberNode*>(operandCounts[i].first)) {
                                     if (NumberNode* numberNode2 = dynamic_cast<NumberNode*>(node)) {
@@ -421,7 +421,7 @@ Node* SymbolicProcessor::simplifyExpression(Node* node) {
                         }
 
                         if (index == -1) {
-                            operandCounts.push_back(std::make_pair(node, 1));
+                            operandCounts.push_back(make_pair(node, 1));
                         } else {
                             operandCounts[index].second++;
                         }

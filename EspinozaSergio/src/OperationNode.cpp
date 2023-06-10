@@ -119,7 +119,7 @@ void OperationNode::setRight(Node* right){
     * - void
 */
 void OperationNode::printTree(){
-    std::cout << operation << " ";
+    cout << operation << " ";
 
     if (left != nullptr) {
         left->printTree();

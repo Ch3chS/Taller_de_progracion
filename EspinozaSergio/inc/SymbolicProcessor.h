@@ -2,6 +2,7 @@
 #define SYMBOLICPROCESSOR_H
 
 #include <functional>
+#include <iterator>
 #include <sstream>
 #include <fstream>
 #include <vector>
