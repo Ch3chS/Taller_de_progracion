@@ -107,6 +107,7 @@ bool Node::load(string filename) {
 
 vector<float> Node::simplex(){
     Simplex *s = new Simplex(this->getRestrictions(), this->getM1(), this->getM2(), this->getM3());
+    cout << "hola\n";
     return s->solve();
 }
 
