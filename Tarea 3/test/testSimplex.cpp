@@ -2,7 +2,7 @@
 
 int main() {
 
-    Simplex *simplex1 = new Simplex("./misc/sistema.txt");
+    Simplex *simplex1 = new Simplex("./misc/testSimplex.txt");
 
     /* Lo siguiente debiese ser un while que efectua el branching
      y llama a simplex->solve() en cada iteracion por ambas ramas.

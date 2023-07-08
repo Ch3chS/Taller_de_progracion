@@ -37,6 +37,7 @@ class Node {
         vector<float> solve();  //Resuelve simplex
         //isFeasible(); Es factible?
         //Branch(); izquierda y derecha
+        Node *copy();
 
         float calculateObjective(const vector<float>& solution);
         bool isIntegerSolution(const vector<float>& solution);

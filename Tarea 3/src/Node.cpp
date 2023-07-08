@@ -111,15 +111,65 @@ vector<float> Node::simplex(){
     return s->solve();
 }
 
-
+Node *Node::copy(){
+    Node* node = new Node();
+    node->N = this->N;
+    node->m1 = this->m1;
+    node->m2 = this->m2;
+    node->m3 = this->m3;
+    node->enteros = this->enteros;
+    node->coeficientes_f = this->coeficientes_f;
+    node->restrictions_m1 = this->restrictions_m1;
+    node->restrictions_m2 = this->restrictions_m2;
+    node->restrictions_m3 = this->restrictions_m3;
+    return node;
+}
 
 vector<float> Node::solve() {
-    if (this->enteros.empty()) {
-        return this->simplex();
+    vector<float> node_solution = this->simplex();
+
+    // Un vector con un solo 0 indica que no hay solución
+    if((int)node_solution.size() == 0) {    
+        node_solution.push_back(0);
+        return node_solution;
     }
 
-    vector<float> emptyVector;
-    return emptyVector;
+    // Caso base, si ya no quedan más restricciones de entero se retorna la solución actual
+    if (this->enteros.empty()) {
+        return node_solution;
+    }
+
+
+    // De quedar restricciones de entero por revisar se va desde el final del vector al principio
+    int indice = enteros.back(); // Indice de la variable entera
+    enteros.pop_back();
+    int r1 = int(node_solution.at(indice + 1));   // variable -> variable <= r1
+    cout << "chao\n";
+    int r2 = r1 + 1;                              // variable -> variable >= r2
+    
+    // Ramifico la incognita del indice para ambos lados con sus respectivos enteros
+    left = copy();  
+    Simplex *s1 = new Simplex(left->getRestrictions(), left->getM1(), left->getM2(), left->getM3());
+    s1->insertConstraint(r1, indice + 1, 1);
+
+    right = copy();
+    Simplex *s2 = new Simplex(right->getRestrictions(), right->getM1(), right->getM2(), right->getM3());
+    s2->insertConstraint(r2, indice + 1, 2);
+
+    // Resuelvo cada uno de los lados
+    vector<float> left_solution = s1->solve();
+    vector<float> right_solution = s2->solve();
+
+    //Elijo la rama con mayor Z y prosigo
+    if((int)left_solution.size() == 0) left_solution.push_back(0);   // Para evitar problemas de vector vacio en lo siguiente verificamos
+    if((int)right_solution.size() == 0) right_solution.push_back(0);
+
+    if(left_solution.at(0) > right_solution.at(0)){
+        return left->solve();
+    }
+    else{
+        return right->solve();
+    }
 }
 
 
