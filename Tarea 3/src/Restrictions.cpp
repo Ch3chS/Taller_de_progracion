@@ -25,5 +25,12 @@ void Restrictions::addRestriction(stringstream& ss){
 vector<vector<float>>  Restrictions::concatenateRestrictions(vector<vector<float>> r1, vector<vector<float>> r2, vector<vector<float>> r3){
     r1.insert(r1.end(), r2.begin(), r2.end());
     r1.insert(r1.end(), r3.begin(), r3.end());
+
+    //Vector de 0s para Simplex
+    vector<float> zeroes;
+    for(int i = 0; i < (int)r1.at(0).size(); i++){
+        zeroes.push_back(0.0);
+    }
+    r1.push_back(zeroes);
     return r1;
 }

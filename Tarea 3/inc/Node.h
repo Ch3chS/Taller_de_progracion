@@ -3,6 +3,7 @@
 
 #include "Simplex.h"
 #include "Restrictions.h"
+#include <limits>
 
 using namespace std;
 
@@ -36,6 +37,10 @@ class Node {
         vector<float> solve();  //Resuelve simplex
         //isFeasible(); Es factible?
         //Branch(); izquierda y derecha
+
+        float calculateObjective(const vector<float>& solution);
+        bool isIntegerSolution(const vector<float>& solution);
+        pair<Node*, Node*> branch();
 
         void printMatriz(vector<vector<float>> m);
 };

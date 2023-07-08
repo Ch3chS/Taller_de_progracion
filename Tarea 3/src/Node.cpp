@@ -82,6 +82,7 @@ bool Node::load(string filename) {
         getline(file, line);
         ss.clear();
         ss << line;
+
         restrictions_m1->addRestriction(ss);
     }
 
@@ -107,19 +108,20 @@ bool Node::load(string filename) {
 
 vector<float> Node::simplex(){
     Simplex *s = new Simplex(this->getRestrictions(), this->getM1(), this->getM2(), this->getM3());
-    cout << "hola\n";
     return s->solve();
 }
 
-vector<float> Node::solve(){
-    if(this->enteros.size() == 0){
-        this->simplex();
-    }
-    
-    vector<float> a;
 
-    return a;
+
+vector<float> Node::solve() {
+    if (this->enteros.empty()) {
+        return this->simplex();
+    }
+
+    vector<float> emptyVector;
+    return emptyVector;
 }
+
 
 
 void Node::printMatriz(vector<vector<float>> m){

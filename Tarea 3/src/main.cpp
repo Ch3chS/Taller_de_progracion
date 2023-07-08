@@ -64,7 +64,7 @@ int main(int argc, char const *argv[]) {
                 if(loaded){
                     result = node.simplex();
                     for(int i = 0; i < (int)result.size(); i++){
-                        cout << result.at(i) << "";
+                        cout << result.at(i) << " ";
                     }
                 }
                 else{
@@ -73,7 +73,11 @@ int main(int argc, char const *argv[]) {
                 break;
             case '3':
                 if(loaded){
-                    node.solve();
+                    result = node.solve();
+                    for(int i = 0; i < (int)result.size(); i++){
+                        cout << result.at(i) << " ";
+                    }
+                    cout << "\n";
                 }
                 else{
                     cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";
