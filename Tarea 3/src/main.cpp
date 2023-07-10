@@ -1,3 +1,4 @@
+#include <ctime>
 #include <cstring>
 #include <dirent.h>
 #include "Node.h"
@@ -15,6 +16,8 @@ int main(int argc, char const *argv[]) {
     vector<float> result;
     vector<string> files; // Vector para almacenar los nombres de los archivos en la carpeta "misc"
     string fileName; // String para almacenar el nombre del archivo elegido por el usuario
+    double time;
+    unsigned t0, t1;
 
     while (!exit) {
         cout << "\n\n---- Menú ----\n" << endl;
@@ -53,19 +56,28 @@ int main(int argc, char const *argv[]) {
                 fileName = "./misc/" + files[fileIndex - 1]; // Obtener el nombre del archivo elegido por el usuario
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 
+                t0 = clock();
                 if (node.load(fileName)) { // Cargar el archivo elegido por el usuario
                     cout << "Cargado!\n\n";
                     //processor.getSource()->printTree();
                     loaded = true;
                 }
+
+                t1 = clock();
+                time = (double(t1 - t0) / CLOCKS_PER_SEC);
+                cout << "Tiempo de ejecución: " << time << "(s)" << endl;
                 
                 break;
             case '2':
                 if(loaded){
+                    t0 = clock();
                     result = node.simplex();
                     for(int i = 0; i < (int)result.size(); i++){
                         cout << result.at(i) << " ";
                     }
+                    t1 = clock();
+                    time = (double(t1 - t0) / CLOCKS_PER_SEC);
+                    cout << "Tiempo de ejecución: " << time << "(s)" << endl;
                 }
                 else{
                     cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";
@@ -73,11 +85,16 @@ int main(int argc, char const *argv[]) {
                 break;
             case '3':
                 if(loaded){
+                    t0 = clock();
                     result = node.solve();
                     for(int i = 0; i < (int)result.size(); i++){
                         cout << result.at(i) << " ";
                     }
                     cout << "\n";
+
+                    t1 = clock();
+                    time = (double(t1 - t0) / CLOCKS_PER_SEC);
+                    cout << "Tiempo de ejecución: " << time << "(s)" << endl;
                 }
                 else{
                     cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";

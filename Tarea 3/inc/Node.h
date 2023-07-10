@@ -39,9 +39,6 @@ class Node {
         //Branch(); izquierda y derecha
         Node *copy();
 
-        float calculateObjective(const vector<float>& solution);
-        bool isIntegerSolution(const vector<float>& solution);
-        pair<Node*, Node*> branch();
 
         void printMatriz(vector<vector<float>> m);
 };

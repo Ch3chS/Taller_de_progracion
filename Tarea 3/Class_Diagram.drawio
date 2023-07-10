@@ -1,11 +1,11 @@
 <mxfile host="65bd71144e">
     <diagram id="OxQSsSUBdV_TnaUaBOoG" name="Page-1">
-        <mxGraphModel dx="562" dy="768" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="753" dy="244" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="6" value="Restrictions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="850" y="150" width="660" height="170" as="geometry"/>
+                    <mxGeometry x="95" y="590" width="660" height="170" as="geometry"/>
                 </mxCell>
                 <mxCell id="7" value="- type: int&#10;- size: int&#10;- restrictions: vector&lt;vector&lt;float&gt;&gt; " style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="6" vertex="1">
                     <mxGeometry y="26" width="660" height="64" as="geometry"/>
@@ -37,24 +37,24 @@
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="630" y="40" as="targetPoint"/>
                         <Array as="points">
-                            <mxPoint x="565" y="40"/>
-                            <mxPoint x="670" y="40"/>
+                            <mxPoint x="573" y="40"/>
+                            <mxPoint x="698" y="40"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="14" value="Node" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="510" y="80" width="220" height="460" as="geometry"/>
+                    <mxGeometry x="510" y="80" width="250" height="430" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" value="- left: Node*&#10;- right: Node*&#10;- N: int&#10;- m1: int&#10;- m2: int&#10;- m3: int&#10;- enteros; vector&lt;int&gt;&#10;- coeficientes_f: vector&lt;float&gt;&#10;- restrictions_m1: Restrictions*&#10;- restrictions_m2: Restrictions*&#10;- restrictions_m3: Restrictions*&#10;- upperBound: float&#10;- lowerBound: float&#10;- z: float" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="14" vertex="1">
-                    <mxGeometry y="26" width="220" height="214" as="geometry"/>
+                    <mxGeometry y="26" width="250" height="214" as="geometry"/>
                 </mxCell>
                 <mxCell id="16" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="14" vertex="1">
-                    <mxGeometry y="240" width="220" height="8" as="geometry"/>
+                    <mxGeometry y="240" width="250" height="8" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="+ getN(): int&#10;+ getM1&#10;+ getM2&#10;+ getM3&#10;+ getEnteros&#10;+ getCoef&#10;+ getRestrictions&#10;+ load&#10;+ simplex&#10;+ solve&#10;+ printMatrix" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="14" vertex="1">
-                    <mxGeometry y="248" width="220" height="212" as="geometry"/>
+                <mxCell id="17" value="+ getN(): int&#10;+ getM1(): int&#10;+ getM2(): int&#10;+ getM3(): int&#10;+ getEnteros(): vector&lt;int&gt;&#10;+ getCoef(): vector&lt;float&gt;&#10;+ getRestrictions(): vector&lt;vector&lt;float&gt;&gt;&#10;+ load(string): bool&#10;+ simplex(): vector&lt;float&gt;&#10;+ solve(): vector&lt;float&gt;&#10;+ printMatrix(vector&lt;vector&lt;float&gt;&gt;): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="14" vertex="1">
+                    <mxGeometry y="248" width="250" height="182" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="2 : n*m&lt;br&gt;" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=diamondThin;endFill=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endSize=12;" parent="1" edge="1" target="15" source="7">
+                <mxCell id="24" value="2 : n*m&lt;br&gt;" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;endArrow=diamondThin;endFill=1;entryX=0.316;entryY=1.027;entryDx=0;entryDy=0;startArrow=none;startFill=0;endSize=12;entryPerimeter=0;" parent="1" source="6" target="17" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="1011" y="119" as="targetPoint"/>
                         <mxPoint x="1131" y="119" as="sourcePoint"/>
