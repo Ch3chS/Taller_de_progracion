@@ -108,7 +108,9 @@ bool Node::load(string filename) {
 
 vector<float> Node::simplex(){
     Simplex *s = new Simplex(this->getRestrictions(), this->getM1(), this->getM2(), this->getM3());
-    return s->solve();
+    vector<float> solution = s->solve();
+    if((int)solution.size() == 0) solution.push_back(0);
+    return solution;
 }
 
 Node *Node::copy(){
@@ -129,10 +131,7 @@ vector<float> Node::solve() {
     vector<float> node_solution = this->simplex();
 
     // Un vector con un solo 0 indica que no hay solución
-    if((int)node_solution.size() == 0) {    
-        node_solution.push_back(0);
-        return node_solution;
-    }
+    if((int)node_solution.size() == 1)  return node_solution;
 
     // Caso base, si ya no quedan más restricciones de entero se retorna la solución actual
     if (this->enteros.empty()) {

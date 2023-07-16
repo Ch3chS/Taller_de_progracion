@@ -72,9 +72,15 @@ int main(int argc, char const *argv[]) {
                 if(loaded){
                     t0 = clock();
                     result = node.simplex();
+                    if((int)result.size() == 1){
+                        cout << "No hay solución\n\n";
+                        break;
+                    }
                     for(int i = 0; i < (int)result.size(); i++){
                         cout << result.at(i) << " ";
                     }
+                    cout << "\n\n";
+
                     t1 = clock();
                     time = (double(t1 - t0) / CLOCKS_PER_SEC);
                     cout << "Tiempo de ejecución: " << time << "(s)" << endl;
@@ -87,10 +93,14 @@ int main(int argc, char const *argv[]) {
                 if(loaded){
                     t0 = clock();
                     result = node.solve();
+                    if((int)result.size() == 1){
+                        cout << "No hay solución\n\n";
+                        break;
+                    }
                     for(int i = 0; i < (int)result.size(); i++){
                         cout << result.at(i) << " ";
                     }
-                    cout << "\n";
+                    cout << "\n\n";
 
                     t1 = clock();
                     time = (double(t1 - t0) / CLOCKS_PER_SEC);
@@ -108,6 +118,6 @@ int main(int argc, char const *argv[]) {
                 break;
         }
     }
-
+    
     return 0;
 }
