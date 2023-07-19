@@ -3,12 +3,12 @@
 int main(){
     Node node;
 
-    string filename = "./misc/MPI_2.txt";
+    string filename = "./misc/MPI_1.txt";
     node.load(filename);
 
 
     // Se comprueba correcta carga de linea 1
-    cout << node.getN() << " " << node.getM1() << " " << node.getM2() << " " << node.getM3() << "\n";
+    cout << node.getM1() << " " << node.getM2() << " " << node.getM3() << "\n";
 
     // Se comprueba correcta carga de linea 2
     for(int i = 0; i < (int)node.getEnteros().size(); i++){

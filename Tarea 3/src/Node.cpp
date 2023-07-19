@@ -1,9 +1,5 @@
 #include "Node.h"
 
-int Node::getN(){
-    return this->N;
-}
-
 int Node::getM1(){
     return this->m1;
 }
@@ -55,7 +51,7 @@ bool Node::load(string filename) {
     // Carga de la primera linea (N: N°Variables, mi: Restricciones tipo i (i = 1, 2 o 3))
     getline(file, line);
     ss << line;
-    ss >> this->N >> this->m1 >> this->m2 >> this->m3;
+    ss >> this->m1 >> this->m2 >> this->m3;
 
 
     // Carga de la segunda linea (Indices de variable con restricción entera)
@@ -115,7 +111,6 @@ vector<float> Node::simplex(){
 
 Node *Node::copy(){
     Node* node = new Node();
-    node->N = this->N;
     node->m1 = this->m1;
     node->m2 = this->m2;
     node->m3 = this->m3;

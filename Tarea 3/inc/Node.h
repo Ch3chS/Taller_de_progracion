@@ -14,7 +14,7 @@ class Node {
         Node* left;
         Node* right;
 
-        int N, m1, m2, m3;
+        int m1, m2, m3;
         vector<int> enteros;
         vector<float> coeficientes_f;
         Restrictions *restrictions_m1, *restrictions_m2, *restrictions_m3;
@@ -24,7 +24,6 @@ class Node {
         float Z;
 
     public:
-        int getN();
         int getM1();
         int getM2();
         int getM3();
