@@ -6,6 +6,7 @@
 class BranchAndBound {
     private:
         int n, m, m1, m2, m3;
+        Simplex *s;
         vector<int> enteros;
         vector<vector<float>> a;
         bool isSolved;
@@ -13,7 +14,13 @@ class BranchAndBound {
         
     public:
         BranchAndBound(string filename);
-        vector<float> solve();
+
+        bool isFeasible(vector<float> result);
+        bool isSolution(Node *node);
+        int selectIndex(vector<float> result);
+
+        void solve();
+        vector<float> solve(Node *node, Simplex *s);
 };
 
 #endif

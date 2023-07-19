@@ -396,6 +396,17 @@ Simplex Simplex::copy() {
     return s;
 }
 
+Simplex *Simplex::copy2() {
+    Simplex *s = new Simplex(initialA, m1, m2, m3);
+    s->izrov = this->izrov;
+    s->iposv = this->iposv;
+    s->isSolved = this->isSolved;
+    s->icase = this->icase;
+    s->a = this->a;
+    s->solution = this->solution;
+    return s;
+}
+
 vector<float> Simplex::getSolution() {
     if (isSolved && icase == 0) {
         return solution;

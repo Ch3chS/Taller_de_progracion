@@ -4,6 +4,7 @@ BranchAndBound::BranchAndBound(string filename) {
 
     ifstream file(filename);
 
+    
     if (!file.is_open()) {
         cout << "No se pudo abrir el archivo" << endl;
         exit(1);
@@ -70,22 +71,101 @@ BranchAndBound::BranchAndBound(string filename) {
     this->a.push_back(row);
     this->isSolved = false; // inicialmente aún no se ha resuelto
     this->root = new Node();
+    this->s = new Simplex(this->a, this->m1, this->m2, this->m3);
     file.close();
 }
 
 
-vector<float> BranchAndBound::solve(){
-    Simplex s = Simplex(this->a, this->m1, this->m2, this->m3);
-    vector<float> result = s.solve();
+bool BranchAndBound::isFeasible(vector<float> result) {
+    return (int)result.size() != 0;
+}
 
-    //Si no tiene solución
-    if((int)result.size() == 0){
+bool BranchAndBound::isSolution(Node *node) {
+    return fabs(node->getLowerBound() - node->getUpperBound()) < 0.001;
+}
+
+int BranchAndBound::selectIndex(vector<float> result){
+    float max = 0;
+    int index = 0;
+    float temp = 0;
+    for(int i = 0; i < (int)enteros.size(); i++){
+        temp = result.at(enteros.at(i)) - (int)result.at(enteros.at(i));
+        if(temp > max){
+            max = temp;
+            index = i;
+        } 
+    }
+    return index;
+}
+
+void BranchAndBound::solve() {
+    vector<float> result = solve(this->root, this->s);
+    if(!isFeasible(result)){
+        cout << "No tiene solución.\n\n";
+    }
+    else{
+        cout << "La solución es: \n";
+        for(int i = 0; i < (int)result.size(); i++){
+            cout << result.at(i) << " ";
+        }
+        cout << "\n\n";
+    }
+}
+
+vector<float> BranchAndBound::solve(Node *node, Simplex *s){
+    vector<float> result = s->solve();
+
+    //Si no tiene solución se retorna el vector vacio (No seguimos por aqui (podamos))
+    if(!isFeasible(result)){
         return result;
     }
+    
+    // Almacenamos el upperBound y lowerBound de este nodo
+    node->setUpperBound(result[0]);
+    node->setLowerBound(result, this->enteros, a[0]);
 
-    this->root->setUpperBound(result[0]);
-    // Si no quedan enteros por revisar entonces retornamos el resultado
-    if(this->enteros.size() == 0){
+    // Si es solución (upperBound = lowerBound) la retornamos
+    if(isSolution(node)){ // No esta entrando
         return result;
     }
+    
+    // ----------------------------- Si no es solución ramificamos -------------------------------------------
+    // Copiamos simplex
+    Simplex *sleft = s->copy2();
+    Simplex *sright = s->copy2();
+
+
+    // Elegimos variable para agregar restricciones
+    int index = enteros.back();
+    enteros.pop_back();
+    //int index = selectIndex(result);
+
+    // Obtenemos valor entero de la variable elegida (truncada)
+    int temp = (int)result.at(index);
+
+    // Insertamos restricciones para cada uno de los lados
+    sleft->insertConstraint(temp, index, 1);
+    sright->insertConstraint(temp + 1, index, 2);
+
+
+    // Creamos los nodos a usar
+    node->setLeft(new Node());
+    node->setRight(new Node());
+
+    // Realizamos los llamados recursivos respectivos
+    vector<float> leftResult = solve(node->getLeft(), sleft);
+    vector<float> rightResult = solve(node->getRight(), sright);
+
+    // ---------------------------------- Evaluación de resultados -------------------------------------------------------------
+
+    // Si ambos son factibles comparamos
+    if(isFeasible(leftResult) && isFeasible(rightResult)){
+        if(leftResult.at(0) > rightResult.at(0)) return leftResult;
+        return rightResult;
+    }
+    // Si solo uno es factible retornamos ese
+    if(isFeasible(leftResult)) return leftResult;
+    if(isFeasible(rightResult)) return rightResult;
+    // Si ninguno es factible retornamos cualquiera de los 2 (es un vector vacio)
+    return rightResult;
 }

@@ -45,6 +45,7 @@ public:
     vector<float> solve(); // Metodo que ejecuta metodo simplex
     void insertConstraint(float b, int var, int type); // Agrega una restriccion var<=b (tipo 1), var>=b (tipo 2), var=b (tipo 3) 
     Simplex copy();
+    Simplex* copy2();
     vector<float> getSolution(); // Retorna la solucion del problema de tamaño n+1 [Z,x1,...,xn] Z: valor funcion objetivo, xi: valor de la variable i
     void printProblemMatrix(); // Imprime la matriz del problema
     void printSolution(); // Imprime la solucion del problema

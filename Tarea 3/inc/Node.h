@@ -27,6 +27,7 @@ class Node {
 
         void setUpperBound(float upperBound);
         void setLowerBound(float lowerBound);
+        void setLowerBound(vector<float> result, vector<int> enteros, vector<float> coef);
         void setLeft(Node *node);
         void setRight(Node *node);
 };

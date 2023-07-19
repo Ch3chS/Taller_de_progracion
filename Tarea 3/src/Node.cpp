@@ -1,5 +1,6 @@
 #include "Node.h"
 
+
 Node::Node(){
     this->upperBound = 0;
     this->lowerBound = 0;
@@ -37,6 +38,17 @@ void Node::setUpperBound(float upperBound){
 }
 
 void Node::setLowerBound(float lowerBound){
+    this->lowerBound = lowerBound;
+}
+
+void Node::setLowerBound(vector<float> result, vector<int> enteros, vector<float> coef){
+    float lowerBound = 0;
+    for(int i = 1; i < (int)enteros.size(); i++) {
+        result.at(enteros.at(i)) = (int)result.at(enteros.at(i));
+    }
+    for(int i = 1; i < (int)result.size(); i++) {
+        lowerBound += result.at(i) * coef.at(i);
+    }
     this->lowerBound = lowerBound;
 }
 
