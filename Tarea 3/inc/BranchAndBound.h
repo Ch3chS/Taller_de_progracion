@@ -13,6 +13,7 @@ class BranchAndBound {
         Node *root;
         
     public:
+        BranchAndBound();
         BranchAndBound(string filename);
 
         bool isFeasible(vector<float> result);

@@ -1,14 +1,14 @@
 #include <ctime>
 #include <cstring>
 #include <dirent.h>
-#include "Node.h"
+#include "BranchAndBound.h"
 
 using namespace std;
 
 int main(int argc, char const *argv[]) {
-/*
-    // Crear una instancia de SymbolicProcessor
-    Node node;
+
+    // Crear una instancia de BranchAndBound
+    BranchAndBound *B;
     char opcion;
     string variable;
     bool exit = false;
@@ -21,10 +21,9 @@ int main(int argc, char const *argv[]) {
 
     while (!exit) {
         cout << "\n\n---- Menú ----\n" << endl;
-        cout << "1. Listar archivos" << endl;
-        cout << "2. Simplex" << endl;
-        cout << "3. Branch and Bound" << endl;
-        cout << "4. Salir\n" << endl;
+        cout << "1. Cargar archivo" << endl;
+        cout << "2. Resolver" << endl;
+        cout << "3. Salir\n" << endl;
         cout << "Ingrese una opción: ";
         cin >> opcion;
         cout << endl;
@@ -57,11 +56,9 @@ int main(int argc, char const *argv[]) {
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 
                 t0 = clock();
-                if (node.load(fileName)) { // Cargar el archivo elegido por el usuario
-                    cout << "Cargado!\n\n";
-                    //processor.getSource()->printTree();
-                    loaded = true;
-                }
+                B = new BranchAndBound(fileName);
+                cout << "Cargado!\n\n";
+                loaded = true;
 
                 t1 = clock();
                 time = (double(t1 - t0) / CLOCKS_PER_SEC);
@@ -71,37 +68,7 @@ int main(int argc, char const *argv[]) {
             case '2':
                 if(loaded){
                     t0 = clock();
-                    result = node.simplex();
-                    if((int)result.size() == 1){
-                        cout << "No hay solución\n\n";
-                        break;
-                    }
-                    for(int i = 0; i < (int)result.size(); i++){
-                        cout << result.at(i) << " ";
-                    }
-                    cout << "\n\n";
-
-                    t1 = clock();
-                    time = (double(t1 - t0) / CLOCKS_PER_SEC);
-                    cout << "Tiempo de ejecución: " << time << "(s)" << endl;
-                }
-                else{
-                    cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";
-                }
-                break;
-            case '3':
-                if(loaded){
-                    t0 = clock();
-                    result = node.solve();
-                    if((int)result.size() == 1){
-                        cout << "No hay solución\n\n";
-                        break;
-                    }
-                    for(int i = 0; i < (int)result.size(); i++){
-                        cout << result.at(i) << " ";
-                    }
-                    cout << "\n\n";
-
+                    B->solve();
                     t1 = clock();
                     time = (double(t1 - t0) / CLOCKS_PER_SEC);
                     cout << "Tiempo de ejecución: " << time << "(s)" << endl;
@@ -110,7 +77,7 @@ int main(int argc, char const *argv[]) {
                     cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";
                 }
                 break;  
-            case '4':
+            case '3':
                 exit = true; // Salir del programa
                 break;
             default:
@@ -118,6 +85,6 @@ int main(int argc, char const *argv[]) {
                 break;
         }
     }
-    */
+    
     return 0;
 }

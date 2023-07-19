@@ -1,5 +1,9 @@
 #include "BranchAndBound.h"
 
+BranchAndBound::BranchAndBound(){
+    
+}
+
 BranchAndBound::BranchAndBound(string filename) {
 
     ifstream file(filename);
