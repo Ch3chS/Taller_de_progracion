@@ -125,7 +125,7 @@ vector<float> BranchAndBound::solve(Node *node, Simplex *s){
     node->setLowerBound(result, this->enteros, a[0]);
 
     // Si es solución (upperBound = lowerBound) la retornamos
-    if(isSolution(node)){ // No esta entrando
+    if(isSolution(node)){ 
         return result;
     }
     

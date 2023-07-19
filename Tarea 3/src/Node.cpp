@@ -43,11 +43,11 @@ void Node::setLowerBound(float lowerBound){
 
 void Node::setLowerBound(vector<float> result, vector<int> enteros, vector<float> coef){
     float lowerBound = 0;
-    for(int i = 1; i < (int)enteros.size(); i++) {
-        result.at(enteros.at(i)) = (int)result.at(enteros.at(i));
+    for(int i = 0; i < (int)enteros.size(); i++) {
+        result.at(enteros.at(i)) = static_cast<int>(result.at(enteros.at(i)));
     }
     for(int i = 1; i < (int)result.size(); i++) {
-        lowerBound += result.at(i) * coef.at(i);
+        lowerBound += (result.at(i) * coef.at(i));
     }
     this->lowerBound = lowerBound;
 }
