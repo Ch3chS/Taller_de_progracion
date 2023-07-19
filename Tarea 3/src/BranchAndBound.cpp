@@ -7,7 +7,6 @@ BranchAndBound::BranchAndBound(){
 BranchAndBound::BranchAndBound(string filename) {
 
     ifstream file(filename);
-
     
     if (!file.is_open()) {
         cout << "No se pudo abrir el archivo" << endl;
@@ -21,7 +20,6 @@ BranchAndBound::BranchAndBound(string filename) {
     string line, token;
     stringstream ss;
     int temp;
-       
 
     // Carga de la primera linea (N: N°Variables, mi: Restricciones tipo i (i = 1, 2 o 3))
     getline(file, line);
@@ -89,13 +87,14 @@ bool BranchAndBound::isSolution(Node *node) {
 }
 
 int BranchAndBound::selectIndex(vector<float> result){
-    float max = 0;
+    float min = 0.5;
     int index = 0;
     float temp = 0;
     for(int i = 0; i < (int)enteros.size(); i++){
-        temp = result.at(enteros.at(i)) - (int)result.at(enteros.at(i));
-        if(temp > max){
-            max = temp;
+        temp = abs(0.5 - (result.at(enteros.at(i)) - (int)result.at(enteros.at(i))));
+        //temp = result.at(enteros.at(i)) - (int)result.at(enteros.at(i));
+        if(temp < min){
+            min = temp;
             index = enteros.at(i);
         } 
     }
@@ -103,7 +102,15 @@ int BranchAndBound::selectIndex(vector<float> result){
 }
 
 void BranchAndBound::solve() {
-    vector<float> result = solve(this->root, this->simplex);
+    vector<float> result;
+    if(!isSolved){
+        result = solve(this->root, this->simplex);    // Si no se resolvio se resuelve
+    }
+    else{
+        result = finalResult;
+    }
+
+    // Se imprime el resultado final
     if(!isFeasible(result)){
         cout << "No tiene solución.\n\n";
     }
@@ -113,6 +120,12 @@ void BranchAndBound::solve() {
             cout << result.at(i) << " ";
         }
         cout << "\n\n";
+    }
+
+    // Por si no se habia resuelto antes, se guarda
+    if(!isSolved){
+        this->isSolved = true;
+        this->finalResult = result;
     }
 }
 

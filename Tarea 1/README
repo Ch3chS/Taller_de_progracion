@@ -1,0 +1,4 @@
+escribir make en la consola sobre el directorio del makefile
+Con la consola ubicada ahi mismo escribir ./bin/main <<nombreArchivo>>
+
+nota: Los archivos deben estar guardados en la carpeta misc

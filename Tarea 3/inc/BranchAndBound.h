@@ -1,6 +1,7 @@
 #ifndef BRANCHANDBOUND_H
 #define BRANCHANDBOUND_H
 
+#include <cmath>
 #include "Node.h"
 
 class BranchAndBound {
@@ -8,6 +9,7 @@ class BranchAndBound {
         int n, m, m1, m2, m3;
         Simplex *simplex;
         vector<int> enteros;
+        vector<float> finalResult;
         vector<vector<float>> a;
         bool isSolved;
         Node *root;
