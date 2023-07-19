@@ -6,7 +6,7 @@
 class BranchAndBound {
     private:
         int n, m, m1, m2, m3;
-        Simplex *s;
+        Simplex *simplex;
         vector<int> enteros;
         vector<vector<float>> a;
         bool isSolved;

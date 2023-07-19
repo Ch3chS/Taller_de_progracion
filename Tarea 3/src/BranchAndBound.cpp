@@ -71,7 +71,7 @@ BranchAndBound::BranchAndBound(string filename) {
     this->a.push_back(row);
     this->isSolved = false; // inicialmente aún no se ha resuelto
     this->root = new Node();
-    this->s = new Simplex(this->a, this->m1, this->m2, this->m3);
+    this->simplex = new Simplex(this->a, this->m1, this->m2, this->m3);
     file.close();
 }
 
@@ -92,14 +92,14 @@ int BranchAndBound::selectIndex(vector<float> result){
         temp = result.at(enteros.at(i)) - (int)result.at(enteros.at(i));
         if(temp > max){
             max = temp;
-            index = i;
+            index = enteros.at(i);
         } 
     }
     return index;
 }
 
 void BranchAndBound::solve() {
-    vector<float> result = solve(this->root, this->s);
+    vector<float> result = solve(this->root, this->simplex);
     if(!isFeasible(result)){
         cout << "No tiene solución.\n\n";
     }
@@ -134,11 +134,8 @@ vector<float> BranchAndBound::solve(Node *node, Simplex *s){
     Simplex *sleft = s->copy2();
     Simplex *sright = s->copy2();
 
-
     // Elegimos variable para agregar restricciones
-    int index = enteros.back();
-    enteros.pop_back();
-    //int index = selectIndex(result);
+    int index = selectIndex(result);
 
     // Obtenemos valor entero de la variable elegida (truncada)
     int temp = (int)result.at(index);
@@ -157,7 +154,6 @@ vector<float> BranchAndBound::solve(Node *node, Simplex *s){
     vector<float> rightResult = solve(node->getRight(), sright);
 
     // ---------------------------------- Evaluación de resultados -------------------------------------------------------------
-
     // Si ambos son factibles comparamos
     if(isFeasible(leftResult) && isFeasible(rightResult)){
         if(leftResult.at(0) > rightResult.at(0)) return leftResult;
