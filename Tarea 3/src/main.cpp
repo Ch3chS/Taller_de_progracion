@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(int argc, char const *argv[]) {
-
+/*
     // Crear una instancia de SymbolicProcessor
     Node node;
     char opcion;
@@ -118,6 +118,6 @@ int main(int argc, char const *argv[]) {
                 break;
         }
     }
-    
+    */
     return 0;
 }

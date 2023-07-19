@@ -1,37 +1,22 @@
 #include "Node.h"
 
 int main(){
-    Node node;
+    // Probando constructor vacio
+    Node *node = new Node();
 
-    string filename = "./misc/MPI_1.txt";
-    node.load(filename);
+    // Probando constructor con lowerBound y upperBound, además de los setters de right y left
+    node->setLeft(new Node(5000, 100));
+    node->setRight(new Node(1500, 1000));
 
+    // Imprimiendo resultado
+    cout << "UpperBound: " << node->getUpperBound() << ", LowerBound " << node->getLowerBound() << endl;
+    cout << "Izq UpperBound: " << node->getLeft()->getUpperBound() << ", Izq LowerBound " << node->getLeft()->getLowerBound() << endl;
+    cout << "Der UpperBound: " << node->getRight()->getUpperBound() << ", Der LowerBound " << node->getRight()->getLowerBound() << endl;
 
-    // Se comprueba correcta carga de linea 1
-    cout << node.getM1() << " " << node.getM2() << " " << node.getM3() << "\n";
-
-    // Se comprueba correcta carga de linea 2
-    for(int i = 0; i < (int)node.getEnteros().size(); i++){
-        cout << node.getEnteros().at(i) << " ";
-    }
-    cout << "\n";
-
-    // Se comprueba correcta carga de linea 3
-    for(int i = 0; i < (int)node.getCoef().size(); i++){
-        cout << node.getCoef().at(i) << " ";
-    }
-    cout << "\n";
-
-    // Se comprueba correcta carga de restricciones
-    node.printMatriz(node.getRestrictions());
-
-
-    // Simplex
-    vector<float> v;
-    v = node.simplex();
-    for(int i = 0; i < (int)v.size(); i++) cout << v.at(i) << " ";
-
-    cout << "\n";
+    // Probando setters de lowerBound y upperBound
+    node->setLowerBound(500);
+    node->setUpperBound(600);    
+    cout << "UpperBound: " << node->getUpperBound() << ", LowerBound " << node->getLowerBound() << endl;
 
     return 0;
 }

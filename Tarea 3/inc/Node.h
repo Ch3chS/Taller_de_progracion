@@ -2,7 +2,6 @@
 #define NODE_H
 
 #include "Simplex.h"
-#include "Restrictions.h"
 #include <limits>
 
 using namespace std;
@@ -14,32 +13,22 @@ class Node {
         Node* left;
         Node* right;
 
-        int m1, m2, m3;
-        vector<int> enteros;
-        vector<float> coeficientes_f;
-        Restrictions *restrictions_m1, *restrictions_m2, *restrictions_m3;
-
         float upperBound;
         float lowerBound;
-        float Z;
 
     public:
-        int getM1();
-        int getM2();
-        int getM3();
-        vector<int> getEnteros();
-        vector<float> getCoef();
-        vector<vector<float>> getRestrictions();
+        Node();
+        Node(float upperBound, float lowerBound);
 
-        bool load(string filename);
-        vector<float> simplex();
-        vector<float> solve();  //Resuelve simplex
-        //isFeasible(); Es factible?
-        //Branch(); izquierda y derecha
-        Node *copy();
+        float getUpperBound();
+        float getLowerBound();
+        Node *getLeft();
+        Node *getRight();
 
-
-        void printMatriz(vector<vector<float>> m);
+        void setUpperBound(float upperBound);
+        void setLowerBound(float lowerBound);
+        void setLeft(Node *node);
+        void setRight(Node *node);
 };
 
 #endif
