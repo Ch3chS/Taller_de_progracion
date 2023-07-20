@@ -1,7 +1,6 @@
 #include "BranchAndBound.h"
 
 int main(){
-    
 
     // ---------- Probando Branch and Bound para archivos sin restricciones enteras (Simplex) --------------------------------------
 

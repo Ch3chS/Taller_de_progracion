@@ -26,6 +26,7 @@ private:
     vector<int> izrov; // indice de variables que son cero en la solucion
     vector<int> iposv; // indice de variables que constituyen la solucion. Si indice >=n entonces la variable es artificial y no se cuenta en la solucion
     vector<float> solution;
+    
     int simplx(); // Metodo que ejecuta el algoritmo simplex
     void maxValue(int mm, std::vector<int> ll, int nll, int iabf, int *kp, float *bmax);
     void locatePivot(int *ip, int kp);

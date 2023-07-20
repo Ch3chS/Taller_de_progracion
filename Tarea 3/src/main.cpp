@@ -9,6 +9,7 @@ int main(int argc, char const *argv[]) {
 
     // Crear una instancia de BranchAndBound
     BranchAndBound *B;
+
     char opcion;
     string variable;
     bool exit = false;
@@ -56,7 +57,7 @@ int main(int argc, char const *argv[]) {
                 cout << "\nCargando " << fileName << "...\n" << endl;
                 
                 t0 = clock();
-                B = new BranchAndBound(fileName);
+                B = new BranchAndBound(fileName);  // Se carga el archivo elegido para resolverlo despues
                 cout << "Cargado!\n\n";
                 loaded = true;
 
@@ -66,14 +67,17 @@ int main(int argc, char const *argv[]) {
                 
                 break;
             case '2':
+                // Se revisa si esta cargado el archivo para resolver
                 if(loaded){
                     t0 = clock();
-                    B->solve();
+
+                    B->solve();    // Aqui es donde se resuelve como tal, el resto son cosas del temporizador
+                    
                     t1 = clock();
                     time = (double(t1 - t0) / CLOCKS_PER_SEC);
                     cout << "Tiempo de ejecución: " << time << "(s)" << endl;
                 }
-                else{
+                else{ // Si no esta resuelto se avisa
                     cout << "\nPrimero debe cargar un archivo, intentelo denuevo\n";
                 }
                 break;  

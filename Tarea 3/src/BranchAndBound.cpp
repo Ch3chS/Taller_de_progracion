@@ -1,9 +1,27 @@
 #include "BranchAndBound.h"
 
-BranchAndBound::BranchAndBound(){
-    
+// ----------------------------------------------------------- Constructores -----------------------------------------------------------------
+
+/*
+    * Método: Constructor->BranchAndBound
+    * Descripción: Constructor por defecto de un problema BranchAndBound
+    * Parámetros:
+    * - void
+    * Retorno:
+    * - void
+*/
+BranchAndBound::BranchAndBound() {
+
 }
 
+/*
+    * Método: Constructor->BranchAndBound
+    * Descripción: Constructor de clase BranchAndBound que toma el problema contenido en un archivo para su construcción
+    * Parámetros:
+    * - filename: String con el nombre del archivo a usar
+    * Retorno:
+    * - void
+*/
 BranchAndBound::BranchAndBound(string filename) {
 
     ifstream file(filename);
@@ -69,8 +87,8 @@ BranchAndBound::BranchAndBound(string filename) {
     for (int i = 0; i <= n; i++) {
         row.push_back(0.0);
     }
-
     this->a.push_back(row);
+    
     this->isSolved = false; // inicialmente aún no se ha resuelto
     this->root = new Node();
     this->simplex = new Simplex(this->a, this->m1, this->m2, this->m3);
@@ -78,14 +96,40 @@ BranchAndBound::BranchAndBound(string filename) {
 }
 
 
+// ----------------------------------------------------- Métodos auxiliares de solve ---------------------------------------------------------
+
+/*
+    * Método: isFeasible
+    * Descripción: Método que revisa si la solución de un problema es factible o no
+    * Parámetros:
+    * - result: Vector de flotantes con una posible solución al problema o sub-problema
+    * Retorno:
+    * - isFeasible: booleano que dice si es factible o no dicha solución
+*/
 bool BranchAndBound::isFeasible(vector<float> result) {
     return (int)result.size() != 0;
 }
 
+/*
+    * Método: isSolution
+    * Descripción: Método que revisa si la solución es final o parcial
+    * Parámetros:
+    * - node: Nodo con su respectivo upperBound y LowerBound 
+    * Retorno:
+    * - isSolution: booleano que dice si la solución es final o no
+*/
 bool BranchAndBound::isSolution(Node *node) {
     return fabs(node->getLowerBound() - node->getUpperBound()) < 0.001;
 }
 
+/*
+    * Método: selectIndex
+    * Descripción: Método que selecciona cual será el siguiente indice a usar en la ramificación a partir de su distancia del entero más cercano
+    * Parámetros:
+    * - result: Vector de flotantes con una posible solución al problema o sub-problema
+    * Retorno:
+    * - index: entero con el indice de variable a usar
+*/
 int BranchAndBound::selectIndex(vector<float> result){
     float min = 0.5;
     int index = 0;
@@ -101,6 +145,17 @@ int BranchAndBound::selectIndex(vector<float> result){
     return index;
 }
 
+
+// --------------------------------------------------------------- solve ---------------------------------------------------------------------
+
+/*
+    * Método: solve
+    * Descripción: Método contenedor encargado de imprimir la solución al problema, y en caso de ser necesario, llamar al método que lo resuelve
+    * Parámetros:
+    * - void
+    * Retorno:
+    * - void
+*/
 void BranchAndBound::solve() {
     vector<float> result;
     if(!isSolved){
@@ -129,7 +184,16 @@ void BranchAndBound::solve() {
     }
 }
 
-vector<float> BranchAndBound::solve(Node *node, Simplex *s){
+/*
+    * Método: solve
+    * Descripción: Método que resuelve el problema haciendo uso de ramificación y poda
+    * Parámetros:
+    * - node: puntero a nodo con un sub-problema (En el primer llamado se usa la raiz del arbol con el problema)
+    * - s: puntero a objeto simplex con la solución del sub-problema asociado al nodo anterior
+    * Retorno:
+    * - result: vector de flotantes con la solución final al problema (Z, valores_de_las_variables), en caso de no tener solución retorna un vector vacío
+*/
+vector<float> BranchAndBound::solve(Node *node, Simplex *s) {
     vector<float> result = s->solve();
 
     //Si no tiene solución se retorna el vector vacio (No seguimos por aqui (podamos))
